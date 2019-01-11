@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta charset="UTF-8">
+
+        <title>Maciej Wrzesiński Portfolio</title>
+
+        <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Orbitron" rel="stylesheet">
+
+        <link rel="stylesheet" href="./assets/css/main.css" type="text/css" />
+        <!-- <link rel="stylesheet" href="./assets/css/main.less" type="text/less" media="screen" /> -->
+
+        <script src="./assets/js/jquery-1.12.4.min.js"></script>
+        <script src="./assets/js/main.js"></script>
+        <!-- <script src="./assets/js/less.min.js" type="text/javascript"></script> -->
+
+    </head>
+    <body>
+
+        <div id="loader-wrapper">
+            <div class="pre-load">
+                <div class="logo white">BZIP</div>
+                <div class="logo yellow">2</div>
+                <div class="logo typewriter white">Lossless Data Compression Algorithm</div>
+            </div>
+        </div>
+
+        <header>
+
+            <div class="post-load">
+                <div class="logo yellow">BZIP</div>
+                <div class="logo white">2</div>
+                <div class="typewriter typewritertop white">Lossless Data Compression Algorithm</div>
+                <div class="typewriter typewriterbottom white">made with javascript</div>
+                <hr>
+            </div>
+
+            <nav>
+                <ul class="white">
+                    <li class="href"><span class="numeric">00.</span> Home <p class="hr"></p></li>
+                    <li class="href"><span class="numeric">01.</span> Description <p class="hr"></p></li>
+                    <li class="href"><span class="numeric">10.</span> License <p class="hr"></p></li>
+                    <li class="href"><span class="numeric">11.</span> Something <p class="hr"></p></li>
+                </ul>
+            </nav>
+
+            <div style="clear: both;"></div>
+
+        </header>
+
+        <main>
+            <div id="pages-wrapper" class="white">
+                <div id="page0" class="page">
+
+                    <div class="container">
+
+                        <div class="half">
+                            <form id="myform">
+                                <p>
+                                    <input id="myfile" name="files[]" multiple="" type="file" />
+                                    <textarea id="text" rows="20" cols="40">nothing loaded</textarea>
+                                </p>
+                            </form>
+                        </div>
+                        <div class="half">..</div>
+
+                    </div>
+
+                </div>
+                <div id="page1" class="page">
+                    <div class="container">
+                        ....
+                    </div>
+                </div>
+                <div id="page2" class="page">
+                    <div class="container">
+                        ...
+                    </div>
+                </div>
+                <div id="page3" class="page">
+                    <div class="container">
+                        ....
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            I am computing something very important... <span id="countdown">000000000000000000</span> ...Do not mind me<span id="joke">. Just kidding nothing important here :)</span>
+        </footer>
+
+        <script>
+            $('html').addClass('js');
+
+            $(window).load(function() {
+                setTimeout(
+                    function() {
+                        $("#loader-wrapper").fadeOut();
+                    }, 2000);
+            });
+        </script>
+    </body>
+</html>
+
+
