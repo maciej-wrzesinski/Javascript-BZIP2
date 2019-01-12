@@ -37,10 +37,6 @@ footer {
     opacity: 0;
 }
 
-footer:hover #joke{
-    animation: fade-in 0.5s ease-out forwards;
-}
-
 nav
 {
     height: 100%;

@@ -80,14 +80,59 @@ const countdownInit = function (cssClass) {
     }
 
     //add leading zeros
-    while(countdownContent.length <= 19) {
+    while(countdownContent.length < 19) {
         countdownContent = "0" + countdownContent;
     }
 
     countdownID.text(countdownContent);
 };
 
-$(document).ready(function() {
+$().ready(function() {
     buttonsInit();
     setInterval(countdownInit, 1, '#countdown');
+
+    $('footer').hover(function () {
+        $('#joke').css('animation', 'fade-in 0.5s ease-out forwards');
+    });
+
+    function download(filename, text) {
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        pom.setAttribute('download', filename);
+
+        if (document.createEvent) {
+            var event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            pom.dispatchEvent(event);
+        }
+        else {
+            pom.click();
+        }
+    }
+
+    $('#myfile').change(function (e) {
+        let file = this.files[0];
+
+        let reader = new FileReader();
+
+        reader.onload = function(e) {
+            let result = event.target.result;
+            $('#text').text(result);
+            download('e.txt', getUnicode(result));
+        };
+        reader.readAsText(file);
+
+    });
+
+    function getUnicode(num) {
+        num = num.toString(16);
+        if (num.length < 3) {
+            for ( var i = num.length; i < 4; i++) {
+                num = '0' + num;
+            }
+        }
+        return ( "&#" + num + ";" );
+    }
+
 });
+
