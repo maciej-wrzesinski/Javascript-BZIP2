@@ -87,52 +87,76 @@ const countdownInit = function (cssClass) {
     countdownID.text(countdownContent);
 };
 
+const showOptions = function () {
+    $('#leftmainpage').addClass('leftmainpage_anim');
+    $('#rightmainpage').addClass('rightmainpage_anim');
+};
+
+const uploadClick = function () {
+
+    $('#myfile').change(function (e) {
+        let file = e.target.files[0];
+
+        if(file) {
+            $('#myfile + label > p').fadeOut('', function() {
+                $('#myfile + label > p').addClass('underline_yellow').fadeIn();
+            });
+            showOptions();
+        }
+
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            let codes = new Uint8Array(e.target.result);
+            let encoding = Encoding.detect(codes);
+            let unicodeString = Encoding.convert(codes, {
+                to: 'unicode',
+                from: encoding,
+                type: 'string'
+            });
+
+            $('#file_encoding').text('Encoding: ' + encoding);
+            $('#file_name').text('File Name: ' + file.name);
+            $('#file_size').text('Size: ' + file.size + ' bytes');
+            $('#text').text(unicodeString.substring(0, 2500) + '...');
+
+        };
+
+        reader.readAsArrayBuffer(file);
+    });
+};
+
 $().ready(function() {
     buttonsInit();
     setInterval(countdownInit, 1, '#countdown');
+    uploadClick();
 
     $('footer').hover(function () {
         $('#joke').css('animation', 'fade-in 0.5s ease-out forwards');
     });
 
-    function download(filename, text) {
-        var pom = document.createElement('a');
-        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-        pom.setAttribute('download', filename);
-
-        if (document.createEvent) {
-            var event = document.createEvent('MouseEvents');
-            event.initEvent('click', true, true);
-            pom.dispatchEvent(event);
+    $('#BS').change(function() {
+        if($(this).is(":checked")) {
+            $('#BSc').text('1').css('color', '');
+            return;
         }
-        else {
-            pom.click();
-        }
-    }
-
-    $('#myfile').change(function (e) {
-        let file = this.files[0];
-
-        let reader = new FileReader();
-
-        reader.onload = function(e) {
-            let result = event.target.result;
-            $('#text').text(result);
-            download('e.txt', getUnicode(result));
-        };
-        reader.readAsText(file);
-
+        $('#BSc').text('0').css('color', '#FEFCFF');
     });
 
-    function getUnicode(num) {
-        num = num.toString(16);
-        if (num.length < 3) {
-            for ( var i = num.length; i < 4; i++) {
-                num = '0' + num;
-            }
+    $('#MTF').change(function() {
+        if($(this).is(":checked")) {
+            $('#MTFc').text('1').css('color', '');
+            return;
         }
-        return ( "&#" + num + ";" );
-    }
+        $('#MTFc').text('0').css('color', '#FEFCFF');
+    });
+
+    $('#HA').change(function() {
+        if($(this).is(":checked")) {
+            $('#HAc').text('1').css('color', '');
+            return;
+        }
+        $('#HAc').text('0').css('color', '#FEFCFF');
+    });
 
 });
 

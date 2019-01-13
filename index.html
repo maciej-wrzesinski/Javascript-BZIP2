@@ -21,8 +21,9 @@
 
         <div id="loader-wrapper">
             <div class="pre-load">
-                <div class="logo white">BZIP</div>
-                <div class="logo yellow">2</div>
+                <div class="logo">
+                    <span class="white">BZIP</span><span class="yellow">2</span>
+                </div>
                 <div class="logo typewriter white">Lossless Data Compression Algorithm</div>
             </div>
         </div>
@@ -30,11 +31,14 @@
         <header>
 
             <div class="post-load">
-                <div class="logo yellow">BZIP</div>
-                <div class="logo white">2</div>
-                <div class="typewriter typewritertop white">Lossless Data Compression Algorithm</div>
-                <div class="typewriter typewriterbottom white">made with javascript</div>
-                <hr>
+                <div class="logo thirty">
+                    <span class="white">BZIP</span><span class="yellow">2</span>
+                </div>
+                <div class="logo seventy">
+                    <div class="typewriter typewritertop white">Lossless Data Compression Algorithm</div>
+                    <div class="typewriter typewriterbottom white">made with javascript</div>
+                    <hr>
+                </div>
             </div>
 
             <nav>
@@ -56,15 +60,49 @@
 
                     <div class="container">
 
-                        <div class="half">
-                            <form id="myform">
-                                <p>
-                                    <input id="myfile" name="files[]" multiple="" type="file" />
-                                    <textarea id="text" rows="20" cols="40">nothing loaded</textarea>
-                                </p>
-                            </form>
+                        <div id="leftmainpage" class="half">
+
+                            <div class="minipage">
+
+                                <form id="myform">
+                                    <div>
+                                        <input id="myfile" type="file" name="files[]" multiple="" />
+                                        <label for="myfile">Choose a file<p class="hr underline_normal"></p></label><br />
+
+                                    </div>
+
+                                    <div id="text"></div>
+
+                                    <span id="file_name" class="minipaneltext"></span><br />
+
+                                    <span id="file_encoding" class="minipaneltext"></span><br />
+
+                                    <span id="file_size" class="minipaneltext"></span><br />
+
+                                </form>
+
+                            </div>
                         </div>
-                        <div class="half">..</div>
+
+                        <div id="rightmainpage" class="half">
+                            <div class="minipage">
+                                <form>
+                                    <span class="mainpagetext">Methods of Compression</span>
+                                    <div class="centeredcheckbox">
+                                        <input type="checkbox" checked id="BS" name="BS" value="BS">
+                                        <label for="BS"><div id="BSc" class="checked">1</div> Block-Sorting</label>
+                                        <input type="checkbox" checked id="MTF" name="MTF" value="MTF"><br />
+                                        <label for="MTF"><span id="MTFc" class="checked">1</span> Move To Front</label>
+                                        <input type="checkbox" checked id="HA" name="HA" value="HA"><br />
+                                        <label for="HA"><span id="HAc" class="checked">1</span> Huffmans Algorithm</label>
+                                    </div>
+
+                                    <span id="compression_state" class="mainpagetext minipaneltext">Current settings are set to a full Bzip2 compression method</span><br />
+
+                                    <input type="submit">
+                                </form>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -88,7 +126,7 @@
         </main>
 
         <footer>
-            I am computing something very important... <span id="countdown">000000000000000000</span> ...Do not mind me<span id="joke">. Just kidding nothing important here :)</span>
+            I am computing something very important... <span id="countdown">000000000000000000</span> ...Do not mind me<span id="joke">. Just kidding nothing interesting here :)</span>
         </footer>
 
         <script>

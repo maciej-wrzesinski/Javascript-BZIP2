@@ -1,6 +1,7 @@
 /*
 color palette
 1C1C1B - black
+353535 - less black
 FFF000 - yellow
 FEFCFF - white
 5600FF - blue
@@ -31,6 +32,11 @@ footer {
     animation-delay: 3.5s;
     opacity: 0;
     line-height: 50px;
+    border-top: 1px #353535 solid;
+}
+
+header {
+    border-bottom: 1px #353535 solid;
 }
 
 #joke {
@@ -93,12 +99,99 @@ ul > li
 
 .half {
     float: left;
+    text-align: center;
     width: 50%;
+}
+
+#leftmainpage {
+    width: 100%;
+}
+
+.leftmainpage_anim {
+    animation: mainpageleft 1.0s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+#rightmainpage {
+    width: 0;
+    opacity: 0.0;
+}
+
+.rightmainpage_anim {
+    animation: mainpageright 1.0s ease-out forwards;
+    animation-delay: 0.5s;
 }
 
 .container {
     width: 100%;
     margin: auto;
+}
+
+.minipage {
+    padding: 40px;
+}
+/*
+forms
+ */
+
+#myfile, input[type=checkbox] {
+    opacity: 0;
+    display: none;
+}
+
+#myfile + label {
+    cursor: pointer;
+    font-size: 23px;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 0;
+    margin: 20px;
+}
+
+.mainpagetext {
+    font-size: 23px;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 0;
+    margin: 20px;
+}
+
+.centeredcheckbox {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: justify;
+    padding: 0 25% 0 30%;
+}
+
+label {
+    cursor: pointer;
+}
+.checked {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 19px;
+    color: #FFF000;
+    padding-right: 5px;
+    cursor: pointer;
+    float: left;
+    width: 20px;
+}
+
+
+#text {
+    font-size: 10px;
+    text-align: justify;
+    text-justify: inter-word;
+    word-break: break-all;
+    margin: 20px;
+    color: #858585;
+}
+
+.minipaneltext {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #858585;
 }
 
 /*
@@ -112,28 +205,48 @@ nav
 
 .underline {
     width: 100%;
-    border: 1px solid #5600FF;
+    border-bottom: 1px solid #5600FF;
     margin: -37px 4px 0 auto;
+}
+
+.underline_normal {
+    width: 100%;
+    border-bottom: 1px solid #5600FF;
+    margin: 0 4px 0 auto;
+}
+
+.underline_yellow {
+    width: 100%;
+    border-bottom: 1px solid #FFF000;
+    margin: 0 4px 0 auto;
 }
 
 /*
 Logo stuff
  */
 .logo {
-    margin-top: -10px;
     font-size: 6.5vw;
     float: left;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    height: 100px;
+    line-height: 100px;
 }
 
 .typewriter {
     font-family: 'Montserrat', sans-serif;
     font-size: 15px;
     text-align: center;
-    margin-top: 20px;
+}
+
+.seventy {
+    width: 70%;
+}
+
+.thirty {
+    width: 30%;
 }
 
 /*
@@ -158,31 +271,21 @@ Pre-loader Post-loader stuff
 
 .post-load hr {
     float: left;
-    margin: 48px;
-    width: 55%;
+    width: 100%;
     background: #FEFCFF;
     animation: slide-right-hr 0.5s ease-out forwards;
     animation-delay: 2.35s;
     transform: scaleX(0);
     transform-origin: left;
+    margin-top: -50px;
 }
 
-.post-load > .typewritertop {
-    position: absolute;
-    width: 74%;
-    margin-top: 25px;
-    animation: fade-in 0.5s ease-out forwards;
-    animation-delay: 2.75s;
-    opacity: 0;
+.post-load .typewritertop {
+    line-height: 50px;
 }
 
-.post-load > .typewriterbottom {
-    position: absolute;
-    width: 74%;
-    margin-top: 54px;
-    animation: fade-in 0.5s ease-out forwards;
-    animation-delay: 2.75s;
-    opacity: 0;
+.post-load .typewriterbottom {
+    line-height: 50px;
 }
 
 .post-load :first-child {
@@ -310,6 +413,33 @@ Pre-loader Post-loader stuff
         opacity: 0;
         left: -170px;
         transform: rotate(-15deg)
+    }
+}
+
+@keyframes mainpageleft {
+    0% {
+        width: 100%;
+    }
+    70% {
+        width: 50%;
+    }
+    100% {
+        width: 50%;
+    }
+}
+
+@keyframes mainpageright {
+    0% {
+        opacity: 0;
+        width: 0;
+    }
+    70% {
+        opacity: 0;
+        width: 50%;
+    }
+    100% {
+        opacity: 1;
+        width: 50%;
     }
 }
 
