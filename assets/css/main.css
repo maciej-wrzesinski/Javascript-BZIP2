@@ -45,13 +45,15 @@ header {
 
 nav
 {
-    height: 100%;
+    height: 95px;
+    margin-top: 5px;
     width: 40%;
     float: left;
     animation: fade-in 0.5s ease-out forwards;
     animation-delay: 2.75s;
     opacity: 0;
     transform-origin: left;
+    text-align: center;
 }
 
 a
@@ -68,7 +70,7 @@ ul
     list-style-type: none;
     font-size: 15px;
     display: inline-block;
-    line-height: 90px;
+    line-height: 95px;
     text-transform: uppercase;
 }
 
@@ -89,7 +91,6 @@ ul > li
 
 .page {
     width: 100%;
-    float: left;
 
     animation: fade-in 0.5s ease-out forwards;
     animation-delay: 3s;
@@ -98,7 +99,6 @@ ul > li
 }
 
 .half {
-    float: left;
     text-align: center;
     width: 50%;
 }
@@ -130,6 +130,15 @@ ul > li
 .minipage {
     padding: 40px;
 }
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
 /*
 forms
  */
@@ -137,6 +146,18 @@ forms
 #myfile, input[type=checkbox] {
     opacity: 0;
     display: none;
+}
+
+input[type=submit] {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-size: 23px;
+    cursor: pointer;
+    color: white;
+    background-color: unset;
+    border: none;
+    padding: 0;
+    border-bottom: 1px solid #5600FF;
 }
 
 #myfile + label {
@@ -162,7 +183,7 @@ forms
     -ms-user-select: none;
     user-select: none;
     text-align: justify;
-    padding: 0 25% 0 30%;
+    padding: 0 30% 0 38%;
 }
 
 label {
@@ -226,7 +247,6 @@ Logo stuff
  */
 .logo {
     font-size: 6.5vw;
-    float: left;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -242,7 +262,7 @@ Logo stuff
 }
 
 .seventy {
-    width: 70%;
+    width: 65%;
 }
 
 .thirty {
@@ -264,13 +284,11 @@ Pre-loader Post-loader stuff
 }
 
 .post-load {
-    float: left;
     width: 60%;
     height: 100px;
 }
 
 .post-load hr {
-    float: left;
     width: 100%;
     background: #FEFCFF;
     animation: slide-right-hr 0.5s ease-out forwards;
@@ -445,4 +463,5 @@ Pre-loader Post-loader stuff
 
 .js .pre-load, .js #loader-wrapper {
     display: block;
+    text-align: center;
 }

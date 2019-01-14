@@ -41,10 +41,12 @@ const buttonsInit = function () {
 
         $(this).on("click", function(){
 
-            $('.href').children('p').fadeOut();
-            $(this).children('p').fadeIn();
+            if( pageCurrent !== i) {
+                $('.href').children('p').fadeOut();
+                $(this).children('p').fadeIn();
+            }
 
-            while(pageCurrent != i) {
+            while(pageCurrent !== i) {
                 if(pageCurrent > i) {//odejmujemy
                     $('.page').each(function (i, obj) {
                         pagePosition[i] += 200;
@@ -59,8 +61,9 @@ const buttonsInit = function () {
                     updatePages();
                     pageCurrent++;
                 }
-
             }
+
+
         });
     });
 };

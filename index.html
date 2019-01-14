@@ -30,14 +30,14 @@
 
         <header>
 
-            <div class="post-load">
-                <div class="logo thirty">
+            <div class="post-load left">
+                <div class="logo left thirty">
                     <span class="white">BZIP</span><span class="yellow">2</span>
                 </div>
-                <div class="logo seventy">
+                <div class="logo right seventy">
                     <div class="typewriter typewritertop white">Lossless Data Compression Algorithm</div>
                     <div class="typewriter typewriterbottom white">made with javascript</div>
-                    <hr>
+                    <hr class="left">
                 </div>
             </div>
 
@@ -56,18 +56,18 @@
 
         <main>
             <div id="pages-wrapper" class="white">
-                <div id="page0" class="page">
+                <div id="page0" class="page left">
 
                     <div class="container">
 
-                        <div id="leftmainpage" class="half">
+                        <div id="leftmainpage" class="half left">
 
                             <div class="minipage">
 
                                 <form id="myform">
                                     <div>
                                         <input id="myfile" type="file" name="files[]" multiple="" />
-                                        <label for="myfile">Choose a file<p class="hr underline_normal"></p></label><br />
+                                        <label for="myfile">Choose a file<p class="underline_normal"></p></label><br />
 
                                     </div>
 
@@ -84,7 +84,7 @@
                             </div>
                         </div>
 
-                        <div id="rightmainpage" class="half">
+                        <div id="rightmainpage" class="half left">
                             <div class="minipage">
                                 <form>
                                     <span class="mainpagetext">Methods of Compression</span>
@@ -94,12 +94,14 @@
                                         <input type="checkbox" checked id="MTF" name="MTF" value="MTF"><br />
                                         <label for="MTF"><span id="MTFc" class="checked">1</span> Move To Front</label>
                                         <input type="checkbox" checked id="HA" name="HA" value="HA"><br />
-                                        <label for="HA"><span id="HAc" class="checked">1</span> Huffmans Algorithm</label>
+                                        <label for="HA"><span id="HAc" class="checked">1</span> Huffmans</label>
                                     </div>
 
                                     <span id="compression_state" class="mainpagetext minipaneltext">Current settings are set to a full Bzip2 compression method</span><br />
 
-                                    <input type="submit">
+                                    <div>
+                                        <input type="submit" value="COMPRESS" />
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -107,17 +109,17 @@
                     </div>
 
                 </div>
-                <div id="page1" class="page">
+                <div id="page1" class="page left">
                     <div class="container">
                         ....
                     </div>
                 </div>
-                <div id="page2" class="page">
+                <div id="page2" class="page left">
                     <div class="container">
                         ...
                     </div>
                 </div>
-                <div id="page3" class="page">
+                <div id="page3" class="page left">
                     <div class="container">
                         ....
                     </div>
