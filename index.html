@@ -61,48 +61,50 @@
                     <div class="container">
 
                         <div id="leftmainpage" class="half left">
-
                             <div class="minipage">
 
-                                <form id="myform">
+                                <div id="myform">
                                     <div>
                                         <input id="myfile" type="file" name="files[]" multiple="" />
-                                        <label for="myfile">Choose a file<p class="underline_normal"></p></label><br />
-
+                                        <label for="myfile">Choose a file<p class="underline_normal"></p></label>
                                     </div>
 
                                     <div id="text"></div>
 
-                                    <span id="file_name" class="minipaneltext"></span><br />
+                                    <span id="file_name" class="minipaneltext gray"></span><br />
 
-                                    <span id="file_encoding" class="minipaneltext"></span><br />
+                                    <span id="file_encoding" class="minipaneltext gray"></span><br />
 
-                                    <span id="file_size" class="minipaneltext"></span><br />
+                                    <span id="file_size" class="minipaneltext gray"></span><br />
 
-                                </form>
+                                </div>
 
                             </div>
                         </div>
 
                         <div id="rightmainpage" class="half left">
                             <div class="minipage">
-                                <form>
+
+                                <div class="minipaneltext">
                                     <span class="mainpagetext">Methods of Compression</span>
                                     <div class="centeredcheckbox">
                                         <input type="checkbox" checked id="BS" name="BS" value="BS">
-                                        <label for="BS"><div id="BSc" class="checked">1</div> Block-Sorting</label>
+                                        <label for="BS"><div id="BSc" class="checked">1</div> Block-Sort</label>
                                         <input type="checkbox" checked id="MTF" name="MTF" value="MTF"><br />
                                         <label for="MTF"><span id="MTFc" class="checked">1</span> Move To Front</label>
                                         <input type="checkbox" checked id="HA" name="HA" value="HA"><br />
                                         <label for="HA"><span id="HAc" class="checked">1</span> Huffmans</label>
                                     </div>
 
-                                    <span id="compression_state" class="mainpagetext minipaneltext">Current settings are set to a full Bzip2 compression method</span><br />
+                                    <span id="compression_state" class="mainpagetext minipaneltext gray">Set to a full Bzip2 compression method</span>
 
                                     <div>
-                                        <input type="submit" value="COMPRESS" />
+                                        <div class="submit_button">
+                                            COMPRESS
+                                        </div>
                                     </div>
-                                </form>
+                                </div>
+
                             </div>
                         </div>
 

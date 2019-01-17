@@ -89,6 +89,10 @@ ul > li
     color: #FFF000;
 }
 
+.gray {
+    color: #858585;
+}
+
 .page {
     width: 100%;
 
@@ -148,8 +152,7 @@ forms
     display: none;
 }
 
-input[type=submit] {
-    font-family: 'Roboto', sans-serif;
+.submit_button {
     text-transform: uppercase;
     font-size: 23px;
     cursor: pointer;
@@ -157,7 +160,9 @@ input[type=submit] {
     background-color: unset;
     border: none;
     padding: 0;
+    margin: 20px;
     border-bottom: 1px solid #5600FF;
+    display: inline-block;
 }
 
 #myfile + label {
@@ -170,7 +175,6 @@ input[type=submit] {
 }
 
 .mainpagetext {
-    font-size: 23px;
     text-transform: uppercase;
     display: inline-block;
     padding: 0;
@@ -182,8 +186,8 @@ input[type=submit] {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    text-align: justify;
-    padding: 0 30% 0 38%;
+    margin: 0 auto;
+    padding: 0 35% 0 35%;
 }
 
 label {
@@ -191,7 +195,7 @@ label {
 }
 .checked {
     font-family: 'Orbitron', sans-serif;
-    font-size: 19px;
+    font-size: 12px;
     color: #FFF000;
     padding-right: 5px;
     cursor: pointer;
@@ -212,7 +216,6 @@ label {
 .minipaneltext {
     font-size: 13px;
     text-transform: uppercase;
-    color: #858585;
 }
 
 /*
