@@ -1,11 +1,62 @@
+/* Page related things */
 var pageArray = [];
 var pagePosition = [];
 var pageCurrent = 0;
 var pageWidth = 0;
 
-var uploadedString = 0;
-
 var canScrollMore = 1;
+
+const triggerPageRotation = function () {
+
+    $(window).bind('mousewheel', function(e) {
+        if (e.originalEvent.wheelDelta >= 0) {
+            forceScroll(1);
+        }
+        else {
+            forceScroll(-1);
+        }
+    });
+
+    $(document).keydown(function(e) {
+        switch(e.which) {
+            case 37: // left
+                forceScroll(1);
+                break;
+
+            case 38: // up
+                forceScroll(1);
+                break;
+
+            case 39: // right
+                forceScroll(-1);
+                break;
+
+            case 40: // down
+                forceScroll(-1);
+                break;
+
+            default: return; // exit this handler for other keys
+        }
+        e.preventDefault(); // prevent the default action (scroll / move caret)
+    });
+};
+
+const forceScroll = function (upordown) {
+    let moved = 0;
+    if (canScrollMore === 1) {
+        canScrollMore = 0;
+        $('.href').each(function (i) {
+
+            if (i === pageCurrent - upordown && moved === 0) {
+                $(this).click();
+                moved = 1;
+            }
+        });
+        setTimeout(function () {
+            canScrollMore = 1;
+        }, 250);
+    }
+};
 
 const updatePages = function () {
     $('.page').each(function(i) {
@@ -141,6 +192,13 @@ const uploadClick = function () {
     });
 };
 
+const compressClick = function () {
+
+    $('.submit_button').on("click", function(){
+        console.log('clicked');
+    });
+};
+
 const settingsClick = function () {
     let checkboxNames = ['BS', 'MTF', 'HA'];
 
@@ -168,30 +226,187 @@ const downloadFile = function (filename, content) {
     document.body.removeChild(e);
 };
 
+$().ready(function() {
+    //Initialize pages
+    buttonsInit();
+    countdownInit();
+
+    //Make buttons work
+    uploadClick();
+    compressClick();
+    settingsClick();
+
+    //Work out the scrolling
+    triggerPageRotation();
+
+    const bzip2 = new BZIP2();
+    let compressedText = bzip2.compress('disa sisa hi');
+    let decompressedText = bzip2.decompress('aassi hsdii ');
+    console.log('disa sisa hi');
+    console.log(compressedText);
+    console.log(decompressedText);
+});
+
+/* BZIP2 algorithm */
+
+function BZIP2() {
+    var that = this;
+    this.originalStartingIndex = 0;
+
+    /* usable methods */
+    this.compress = function(dataString) {
+        return doHuffmans(doMoveToFront(doBurrowsWheelerTransform(dataString)));
+    }
+
+    this.decompress = function(dataString) {
+        return undoBurrowsWheelerTransform(undoMoveToFront(undoHuffmans(dataString)));
+    }
+
+    /* private methods that private methods below use */
+    let sortWithIndeces = function (originalArray) {
+        let toSort = originalArray.slice();
+        let size = toSort.length;
+
+        //add indeces
+        for (let i = 0; i < toSort.length; i++) {
+            toSort[i] = [toSort[i], i];
+        }
+
+        //sort them out
+        toSort.sort(function(left, right) {
+            return left[0] < right[0] ? -1 : 1;
+        });
+
+        //sort the same chars by next chars in the string
+        let i = 0;
+        let debug = 0
+        while (i < size - 1) {
+            if (toSort[i][0] == toSort[i+1][0]) {
+
+                let j = 1;
+                let checked = 0;
+                //this loop checks every following char, stop on the end of the string
+                while (checked === 0 && j+i < size - 1 && debug < 1000 ) {
+                    debug++;
+
+                    if (toSort[i][1] + j === size || toSort[i + 1][1] + j === size) { //if it got to the end of string, then end the loop it does not have to swap :)
+                        checked = 1;
+                        continue;
+                    }
+                    let firstIndex = (toSort[i][1] + j);
+                    let secondIndex = (toSort[i + 1][1] + j);
+
+                    //this only checks one letter after the thing MAKE IT TO CHECK ALL OF THEM
+                    if (originalArray[firstIndex] > originalArray[secondIndex]) {
+                        let x = toSort[i][0], y = toSort[i][1];
+                        toSort[i][0] = toSort[i + 1][0];
+                        toSort[i][1] = toSort[i + 1][1];
+                        toSort[i + 1][0] = x;
+                        toSort[i + 1][1] = y;
+
+                        //go back 2 (actually 1) step back to check the letter before
+                        i = 0;
+                        checked = 1;
+                    }
+                    //if the following chars are still the same, check next ones
+                    else if (originalArray[firstIndex] === originalArray[secondIndex]) {
+                        j++;
+                    }
+                    else {
+                        checked = 1;
+                    }
+                }
+            }
+            i++;
+        }
+
+        toSort.sortIndices = [];
+        for (let j = 0; j < toSort.length; j++) {
+            toSort.sortIndices.push(toSort[j][1]);
+            toSort[j] = toSort[j][0];
+        }
+        return toSort;
+    };
+
+    /* private methods */
+    let doBurrowsWheelerTransform = function(dataString) {
+
+        let size = dataString.length;
+        dataString = dataString.split('');
+        let transformedString;
+
+        transformedString = sortWithIndeces(dataString.slice());
+
+        console.log(transformedString)
+        //find the string 'sorted text - 1'
+        let finalText = [];
+        for (let i = 0; i < size; i++) {
+            finalText[i] = dataString[(transformedString['sortIndices'][i] - 1 + size) % size];
+        }
+
+        //find index in sorted text that contains char that starts original text
+        for (let i = 0; i < size; i++) {
+            if (transformedString['sortIndices'][i] === 0 ) {
+                that.originalStartingIndex = i;
+                break;
+            }
+        }
+        return finalText.join('');
+    }
+
+    let undoBurrowsWheelerTransform = function(dataString) {
+        let size = dataString.length;
+        dataString = dataString.split('');
+        let theArray = new Array(size).fill('');
+
+        //create size x size array with first row as compressed text and sort it
+        theArray[0] = dataString.slice();
+        theArray = sortAlphabetically2DArray(theArray.slice(), size, 0);
+        for (let i = 1; i < size; i++) {
+            theArray[i] = new Array(size);
+        }
+
+        //add compressed text to next row and sor it 'size' times
+        for (let i = 1; i < size; i++) {
+            theArray[i] = dataString.slice();
+            theArray = sortAlphabetically2DArray(theArray.slice(), size, i);
+        }
+
+        let finalText = new Array(size).fill('');
+        for (let i = 0, j = size; i < size; i++, j--) {
+            finalText[j] = theArray[i][that.originalStartingIndex];
+        }
+
+        return finalText.join('');
+        return dataString;
+    }
+
+    let doMoveToFront = function(dataString) {
+        return dataString;
+    }
+
+    let undoMoveToFront = function(dataString) {
+        return dataString;
+    }
+
+    let doHuffmans = function(dataString) {
+        return dataString;
+    }
+
+    let undoHuffmans = function(dataString) {
+        return dataString;
+    }
+}
+
+var uploadedString = 0;
+
+var transformedText;
+
 const swapElementsArray = function (textArray, index1, index2) { //this swaps elements in array
     let a = textArray[index1];
     textArray[index1] = textArray[index2];
     textArray[index2] = a;
     //textArray[index1] = textArray.splice(index2, 1, textArray[index1])[0];
-};
-
-const sortAlphabeticallyParallel = function (text, indexes, size) { //this sorts an array of indexes in the way that all the elements in char array are sorted alphabetically
-    let i = 1;
-    while (i !== size) {
-        if (text[i] > text[i + 1]) {
-            swapElementsArray(text, i, i + 1);
-            swapElementsArray(indexes, i, i + 1);
-            --i;
-        }
-        else if (text[i] === text[i + 1]) {
-            if (text[indexes[i]] > text[indexes[i + 1]]) {
-                swapElementsArray(text, i, i + 1);
-                swapElementsArray(indexes, i, i + 1);
-            }
-        }
-        else
-            ++i;
-    }
 };
 
 const sortAlphabetically2DArray = function (array, size, sortedArrayNumber) {
@@ -212,142 +427,43 @@ const sortAlphabetically2DArray = function (array, size, sortedArrayNumber) {
     return array;
 };
 
-const sortWithIndeces = function (toSort) {
-    for (var i = 0; i < toSort.length; i++) {
-        toSort[i] = [toSort[i], i];
-    }
-    toSort.sort(function(left, right) {
-        return left[0] < right[0] ? -1 : 1;
-    });
-    toSort.sortIndices = [];
-    for (var j = 0; j < toSort.length; j++) {
-        toSort.sortIndices.push(toSort[j][1]);
-        toSort[j] = toSort[j][0];
-    }
-    return toSort;
-};
-
-const compressBWT = function (text, indexOriginal) {
-    let size = text.length;
-    text = text.split('');
-    let indexes = new Array(size).fill(0);
-
-    //get all indexes
-    for (let i = 0; i < size; i++) {
-        indexes[i] = i;
-    }
-
-    //sort lexically
-    let sortedText = text.slice().sort(function (x, y) {
-        let strlenght = size;
-        let strtext = text;
-        while (strtext[x] === strtext[y])
-        {
-            if (++x === strlenght)
-                x = 0;
-            if (++y === strlenght)
-                y = 0;
-            if (!--strlenght)
-                return 0;
-        }
-        if (strtext[x] > strtext[y])
-            return 1;
-        else
-            return -1;
-    });
-
-    console.log(sortedText)
-    //find the string 'sorted text - 1'
-    let finalText = [];
-    for (let i = 0; i < size; i++) {
-        finalText[i] = text[(sortedText['sortIndices'][i] - 1 + size) % size];
-    }
-
-    //find index in sorted text that starts original text in sorted indexes
-    for (let i = 0; i < size; i++) {
-        if (sortedText['sortIndices'][i] === 0 ) {
-            indexOriginal.value = i;
-            break;
-        }
-    }
-
-    console.log(finalText.join(''))
-    return finalText.join('');
-};
-
-/*
-const compressBWT = function (text, indexOriginal) {
-    let size = text.length;
-    let indexes = new Array(size).fill(0);
-
-    //get all indexes
-    for (let i = 0; i < size; i++) {
-        indexes[i] = i;
-    }
-
-    text = text.split('');
-    sortedText = text.slice();
-    sortedIndexes = indexes.slice();
-
-    //sort both text and indexes alphabetically
-    sortAlphabeticallyParallel(sortedText, sortedIndexes, size);
-
-    //find the string 'sorted text - 1'
-    let finalText = [];
-    for (let i = 0; i < size; i++) {
-        console.log(sortedText)
-        finalText[i] = text[(sortedIndexes[i] - 1 + size) % size];
-    }
-
-    //find index in sorted text that starts original text in sorted indexes
-    for (let i = 0; i < size; i++) {
-        if (sortedIndexes[i] === 0 ) {
-            indexOriginal.value = i;
-            break;
-        }
-    }
-
-    console.log(finalText.join(''))
-    return finalText.join('');
-};
-*/
-
 const decompressBWT = function (compressedText, originalIndex) {
-    let size = compressedText.length;
-    compressedText = compressedText.split('');
+    let size = dataString.length;
+    dataString = dataString.split('');
     let bucket = new Array(256).fill(0);
     let F = [];
     let indices = new Array(size);
     let finalText = new Array(size).fill(0);
 
+    //fill the bucket with count of each char
     for (let i = 0; i < size; i++)
-        bucket[compressedText[i].charCodeAt(0)]++;
+        bucket[dataString[i].charCodeAt(0)]++;
 
+    //F now has chars in increasing order
     for (let i = 0; i < 256; i++)
-        for (let j = 0; j < bucket[i]; ++j) {
+        for (let j = 0; j < bucket[i]; ++j)
             F.push(i);
-        }
-    console.log(F);
 
-    for (let i = 0, j = 0; i < 256; ++i) {
+    for (let i = 0, j = 0; i < 256; i++) {
         while (i >= F[j] && j < size)
             ++j;
 
         bucket[i] = j;
-
     }
-    console.log(bucket);
 
-    for(let i = 0; i < size; ++i) {
-        console.log(bucket[compressedText[i].charCodeAt(0)])
-        indices[bucket[compressedText[i].charCodeAt(0)]++] = i;
+    ///this does somethig fucky
+    for(let i = 0; i < size; i++) {
+        console.log("W " + dataString[i].charCodeAt(0) + " jest " + bucket[dataString[i].charCodeAt(0)] + " ma byc " + i)
+
+        indices[bucket[dataString[i].charCodeAt(0)]++] = i;
     }
 
     console.log(indices);
 
-    let j = originalIndex;
+    let j = that.originalStartingIndex;
     for(let i = 0; i < size; ++i) {
-        finalText[i] = compressedText[j];
+        console.log(dataString[j]);
+        finalText[i] = dataString[j];
         j=indices[j];
     }
 
@@ -390,68 +506,4 @@ const decompressBWT2 = function (compressedText, originalIndex) {
     return finalText.join('');
 };
 
-$().ready(function() {
-    //Initialize pages
-    buttonsInit();
-    countdownInit();
-
-    //Make settings and upload buttons work
-    uploadClick();
-    settingsClick();
-
-    //make scroll work
-    $(window).bind('mousewheel', function(e) {
-        if (canScrollMore === 1) {
-            if (e.originalEvent.wheelDelta >= 0) {
-                console.log('Scroll up pageCurrent - 1 on click');
-                let moved = 0;
-                $('.href').each(function (i, obj) {
-
-                    if (i === pageCurrent - 1 && moved === 0) {
-                        moved = 1;
-                        $(this).click();
-                    }
-                });
-            }
-            else {
-                console.log('Scroll down pageCurrent + 1 on click');
-                let moved = 0;
-                $('.href').each(function (i, obj) {
-                    if (i === pageCurrent + 1 && moved === 0) {
-                        moved = 1;
-                        $(this).click();
-                    }
-                });
-            }
-            canScrollMore = 0;
-            setTimeout(function(){ canScrollMore = 1; }, 250);
-        }
-    });
-
-
-    /*
-        LambadziaraxD
-        MemeMaterial
-        Hej, co u CIebie?
-        Hejdwd
-     */
-    let theString = 'Polska Wikipedia'.trim();
-    let indexOriginal = { value: 0 };
-
-    let compTXT = compressBWT(theString, indexOriginal);
-
-    //console.log(decompressBWT(compTXT, indexOriginal.value));
-    //console.log(theString + ' ORIGINAL');
-    //console.log(indexOriginal);
-
-    $('.submit_button').on("click", function(){
-        console.log('clicked');
-        if( uploadedString === 0) {
-            console.log('error');
-        }
-
-        console.log(compressBWT(uploadedString, indexOriginal));
-
-    });
-});
 

@@ -47,7 +47,7 @@ nav
 {
     height: 95px;
     margin-top: 5px;
-    width: 40%;
+    width: 25%;
     float: left;
     animation: fade-in 0.5s ease-out forwards;
     animation-delay: 2.75s;
@@ -58,7 +58,7 @@ nav
 
 a
 {
-    color: #000;
+    color: #858585;
     text-decoration: none;
     display: block;
 }
@@ -132,7 +132,8 @@ ul > li
 }
 
 .minipage {
-    padding: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
 }
 
 .left {
@@ -181,6 +182,10 @@ forms
     margin: 20px;
 }
 
+.bigcenteredtext {
+    text-align: center;
+    font-size: 30px;
+}
 .centeredcheckbox {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -249,13 +254,14 @@ nav
 Logo stuff
  */
 .logo {
-    font-size: 6.5vw;
+    font-size: 7vw;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     height: 100px;
     line-height: 100px;
+    text-align: center;
 }
 
 .typewriter {
@@ -265,11 +271,11 @@ Logo stuff
 }
 
 .seventy {
-    width: 65%;
+    width: 67%;
 }
 
 .thirty {
-    width: 30%;
+    width: 33%;
 }
 
 /*
@@ -287,7 +293,7 @@ Pre-loader Post-loader stuff
 }
 
 .post-load {
-    width: 60%;
+    width: 75%;
     height: 100px;
 }
 
