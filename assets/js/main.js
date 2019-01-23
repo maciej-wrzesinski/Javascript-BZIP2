@@ -1,4 +1,20 @@
+
 /* Page related things */
+
+$().ready(function() {
+    //Initialize pages
+    buttonsInit();
+    countdownInit();
+
+    //Make buttons work
+    uploadClick();
+    compressClick();
+    settingsClick();
+
+    //Work out the scrolling and arrows
+    triggerPageRotation();
+});
+
 var pageArray = [];
 var pagePosition = [];
 var pageCurrent = 0;
@@ -215,7 +231,7 @@ const settingsClick = function () {
 
 const downloadFile = function (filename, content) {
     let e = document.createElement('a');
-    e.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+    e.setAttribute('href', 'data:octet/stream,' + encodeURIComponent(content));
     e.setAttribute('download', filename);
 
     e.style.display = 'none';
@@ -226,210 +242,15 @@ const downloadFile = function (filename, content) {
     document.body.removeChild(e);
 };
 
-$().ready(function() {
-    //Initialize pages
-    buttonsInit();
-    countdownInit();
+const saveByteArray = function (data, name) {
+    var a = document.createElement("a");
+    a.style.display = 'none';
+    document.body.appendChild(a);
 
-    //Make buttons work
-    uploadClick();
-    compressClick();
-    settingsClick();
-
-    //Work out the scrolling
-    triggerPageRotation();
-
-    const bzip2 = new BZIP2();
-    let text = 'this is a very nice conversation <>?::"{}][;/., !@#$%^&*())_+  +_)(*&^%$#@! 1234567890-= =-0987654321 Z!x2C#v4B%n6M&pomoc7557 Hello :)  ';
-    let compressedText = bzip2.compress(text);
-    let decompressedText = bzip2.decompress(compressedText);
-    console.log('-------------------------')
-    console.log(compressedText);
-    console.log(decompressedText);
-
-    console.log(text == decompressedText)
-});
-
-/* BZIP2 algorithm */
-
-function BZIP2() {
-    var that = this;
-    this.originalStartingIndex = 0;
-    this.maxChar = 0;
-
-    /* usable methods */
-
-    this.compress = function(dataString) {
-        //get max char so we can limit char buckets
-        for (let i = 0; i < dataString.length; i++)
-            if (dataString[i].charCodeAt(0) > this.maxChar)
-                this.maxChar = dataString[i].charCodeAt(0);
-        this.maxChar++;
-
-        return doHuffmans(doMoveToFront(doBurrowsWheelerTransform(dataString)));
-    }
-
-    this.decompress = function(dataString) {
-        return undoBurrowsWheelerTransform(undoMoveToFront(undoHuffmans(dataString)));
-    }
-
-    /* private methods that private methods below use */
-
-    let sortWithIndeces = function (originalArray) {
-        let size = originalArray.length;
-        let toSort = new Array(size);
-
-        //add indeces and arrange it this way so .sort() can work with this properly
-        for (let i = 0; i < originalArray.length; i++) {
-            toSort[i] = [originalArray.slice().splice(i, originalArray.length).join('') + originalArray.join(''), i];
-        }
-
-        //sort them out
-        toSort.sort(function(left, right) {
-            return left[0] < right[0] ? -1 : 1;
-        });
-
-        toSort.sortIndices = [];
-        for (let j = 0; j < toSort.length; j++) {
-            toSort.sortIndices.push(toSort[j][1]);
-            toSort[j] = toSort[j][0];
-        }
-
-        return toSort;
-    };
-
-    let sortAlphabetically2DArray = function (array, size, sortedArrayNumber) {
-        let i = 0;
-        while (i !== size) {
-            if (array[sortedArrayNumber][i] > array[sortedArrayNumber][i + 1]) {
-                for (let j = 0; j <= sortedArrayNumber; j++) {
-                    if (array[j][i]) {
-                        //swap elements in array
-                        array[j][i] = array[j].splice(i + 1, 1, array[j][i])[0];
-                    }
-                }
-                --i;
-            }
-            else
-                ++i;
-        }
-        return array;
-    };
-
-    /* private methods */
-
-    let doBurrowsWheelerTransform = function(dataString) {
-
-        let size = dataString.length;
-        dataString = dataString.split('');
-        let transformedString;
-
-        transformedString = sortWithIndeces(dataString.slice());
-
-        //find the string 'sorted text - 1'
-        let finalText = [];
-        for (let i = 0; i < size; i++) {
-            finalText[i] = dataString[(transformedString['sortIndices'][i] - 1 + size) % size];
-        }
-
-        //find index in sorted text that contains char that starts original text
-        for (let i = 0; i < size; i++) {
-            if (transformedString['sortIndices'][i] === 0 ) {
-                that.originalStartingIndex = i;
-                break;
-            }
-        }
-
-        return finalText.join('');
-    }
-
-    let undoBurrowsWheelerTransform = function(dataString) {
-        let size = dataString.length;
-        dataString = dataString.split('');
-        let theArray = new Array(size).fill('');
-
-        //create size x size array with first row as compressed text and sort it
-        theArray[0] = dataString.slice();
-        theArray = sortAlphabetically2DArray(theArray.slice(), size, 0);
-        for (let i = 1; i < size; i++) {
-            theArray[i] = new Array(size);
-        }
-
-        //add compressed text to next row and sor it 'size' times
-        for (let i = 1; i < size; i++) {
-            theArray[i] = dataString.slice();
-            theArray = sortAlphabetically2DArray(theArray.slice(), size, i);
-        }
-
-        let finalText = new Array(size).fill('');
-        for (let i = 0, j = size; i < size; i++, j--) {
-            finalText[j] = theArray[i][that.originalStartingIndex];
-        }
-
-        return finalText.join('');
-        return dataString;
-    }
-
-    let doMoveToFront = function(dataString) {
-        let size = dataString.length;
-        dataString = dataString.split('');
-        finalString = new Array(size);
-        let charsArray = new Array(that.maxChar);
-
-        for (let i = 0; i < that.maxChar; i++) {
-            charsArray[i] = i;
-        }
-
-        for (let i = 0; i < size; i++) {
-
-            let chosenIndex = 0;
-            for (let j = 0; j < that.maxChar; j++) {
-                if (dataString[i].charCodeAt(0) == charsArray[j]) {
-                    chosenIndex = j;
-                    break;
-                }
-            }
-            finalString[i] = chosenIndex;
-
-            charsArray.unshift(parseInt(charsArray.splice(chosenIndex, 1).join()));
-        }
-        return finalString;
-    }
-
-    let undoMoveToFront = function(dataString) {
-        let size = dataString.length;
-        finalString = new Array(size);
-        let charsArray = new Array(that.maxChar);
-
-        for (let i = 0; i < that.maxChar; i++) {
-            charsArray[i] = i;
-        }
-
-        for (let i = 0; i < size; i++) {
-
-            finalString[i] = charsArray[dataString[i]];
-            let tmp = charsArray[dataString[i]];
-
-            for (let j = dataString[i]; j > 0 ; j--) {
-                charsArray[j] = charsArray[j-1];
-            }
-
-            charsArray[0] = tmp;
-        }
-
-        //convert back to string
-        for (let i = 0; i < size; i++) {
-            finalString[i] = String.fromCharCode(finalString[i]);
-        }
-
-        return finalString.join('');
-    }
-
-    let doHuffmans = function(dataString) {
-        return dataString;
-    }
-
-    let undoHuffmans = function(dataString) {
-        return dataString;
-    }
-}
+    var blob = new Blob([data], {type: "octet/stream"}),
+        url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = name;
+    a.click();
+    window.URL.revokeObjectURL(url);
+};
