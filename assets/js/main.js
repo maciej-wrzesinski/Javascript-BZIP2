@@ -6,13 +6,14 @@ $().ready(function() {
     buttonsInit();
     countdownInit();
 
-    //Make buttons work
-    uploadClick();
-    compressClick();
-    settingsClick();
-
     //Work out the scrolling and arrows
     triggerPageRotation();
+
+    let bzip2 = new BZIP2();
+
+    //textareastrigger
+    triggerCompression(bzip2);
+
 });
 
 var pageArray = [];
@@ -82,15 +83,15 @@ const updatePages = function () {
 
 const buttonsInit = function () {
 
+    $('.page')
     //count pages and transform them
-    $('.page').each(function(i) {
+        .each(function(i) {
 
         $('#pages-wrapper').css('width', 100*(i+1) + '%');
         pageWidth = 100/(i+1);
-    });
+    })
 
-    $('.page').each(function(i) {
-
+        .each(function(i) {
         pageArray[i] = '#page' + i;
         pagePosition[i] = 100 * i;
         $(pageArray[i]).css('transform', 'translateX(' + pagePosition[i] + '%)');
@@ -98,18 +99,19 @@ const buttonsInit = function () {
         $(pageArray[i]).css('width', pageWidth + '%');
     });
 
+    $('.href')
     //Make first one already highlighted on start
-    $('.href').each(function(i) {
+        .each(function(i) {
 
         if(i === 0)
             $(this).children('p').addClass('underline').fadeIn();
 
         else
             $(this).children('p').addClass('underline').fadeOut();
-    });
+    })
 
     //Make every button clickable
-    $('.href').each(function(i) {
+        .each(function(i) {
 
         $(this).on("click", function(){
 
@@ -170,87 +172,23 @@ const countdownWork = function (cssClass) {
     countdownID.text(countdownContent);
 };
 
-const showOptions = function () {
-    $('#leftmainpage').addClass('leftmainpage_anim');
-    $('#rightmainpage').addClass('rightmainpage_anim');
-};
+const triggerCompression = function (bzip2) {
 
-const uploadClick = function () {
+    $('#compress').on('click', function(){
+        var text = $.trim($('#inputarea').val());
+        if (text !== '') {
 
-    $('#myfile').change(function (e) {
-        let file = e.target.files[0];
+            $('#outputarea').val(bzip2.compress(text));
 
-        if(file) {
-            $('#myfile + label > p').fadeOut('', function() {
-                $('#myfile + label > p').addClass('underline_yellow').fadeIn();
-            });
-            showOptions();
         }
-
-        let reader = new FileReader();
-        reader.onload = function (e) {
-            let codes = new Uint8Array(e.target.result);
-            let encoding = Encoding.detect(codes);
-            let unicodeString = Encoding.convert(codes, {
-                to: 'unicode',
-                from: encoding,
-                type: 'string'
-            });
-
-            $('#file_encoding').text('Encoding: ' + encoding);
-            $('#file_name').text('File Name: ' + file.name);
-            $('#file_size').text('Size: ' + file.size + ' bytes');
-            $('#text').text(unicodeString.substring(0, ($(window).width() + $(window).height())) + '...');
-            //uploadedString = unicodeString;
-        };
-
-        reader.readAsArrayBuffer(file);
     });
-};
 
-const compressClick = function () {
+    $('#decompress').on('click', function(){
+        var text = $.trim($('#inputarea').val());
+        if (text !== '') {
 
-    $('.submit_button').on("click", function(){
-        console.log('clicked');
+            $('#outputarea').val(bzip2.decompress(text));
+
+        }
     });
-};
-
-const settingsClick = function () {
-    let checkboxNames = ['BS', 'MTF', 'HA'];
-
-    checkboxNames.forEach(function (value) {
-        $('#' + value).change(function() {
-            if($(this).is(":checked")) {
-                $('#' + value + 'c').text('1').css('color', '');
-                return;
-            }
-            $('#' + value + 'c').text('0').css('color', '#FEFCFF');
-        });
-    });
-};
-
-const downloadFile = function (filename, content) {
-    let e = document.createElement('a');
-    e.setAttribute('href', 'data:octet/stream,' + encodeURIComponent(content));
-    e.setAttribute('download', filename);
-
-    e.style.display = 'none';
-    document.body.appendChild(e);
-
-    e.click();
-
-    document.body.removeChild(e);
-};
-
-const saveByteArray = function (data, name) {
-    var a = document.createElement("a");
-    a.style.display = 'none';
-    document.body.appendChild(a);
-
-    var blob = new Blob([data], {type: "octet/stream"}),
-        url = window.URL.createObjectURL(blob);
-    a.href = url;
-    a.download = name;
-    a.click();
-    window.URL.revokeObjectURL(url);
 };

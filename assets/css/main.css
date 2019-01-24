@@ -107,28 +107,9 @@ ul > li
     width: 50%;
 }
 
-#leftmainpage {
-    width: 100%;
-}
-
-.leftmainpage_anim {
-    animation: mainpageleft 1.0s ease-out forwards;
-    animation-delay: 0.5s;
-}
-
-#rightmainpage {
-    width: 0;
-    opacity: 0.0;
-}
-
-.rightmainpage_anim {
-    animation: mainpageright 1.0s ease-out forwards;
-    animation-delay: 0.5s;
-}
-
 .container {
     width: 100%;
-    margin: auto;
+    margin: 50px 0 auto;
 }
 
 .minipage {
@@ -148,10 +129,17 @@ ul > li
 forms
  */
 
-#myfile, input[type=checkbox] {
-    opacity: 0;
-    display: none;
+textarea {
+    outline: none;
+    background-color: #1C1C1B;
+    color: white;
+    border: 1px #353535 solid;
+    resize: none;
+    font-family: 'Roboto', sans-serif;
+    width: 240px;
+    height: 320px;
 }
+
 
 .submit_button {
     text-transform: uppercase;
@@ -164,15 +152,6 @@ forms
     margin: 20px;
     border-bottom: 1px solid #5600FF;
     display: inline-block;
-}
-
-#myfile + label {
-    cursor: pointer;
-    font-size: 23px;
-    text-transform: uppercase;
-    display: inline-block;
-    padding: 0;
-    margin: 20px;
 }
 
 .mainpagetext {
@@ -440,33 +419,6 @@ Pre-loader Post-loader stuff
         opacity: 0;
         left: -170px;
         transform: rotate(-15deg)
-    }
-}
-
-@keyframes mainpageleft {
-    0% {
-        width: 100%;
-    }
-    70% {
-        width: 50%;
-    }
-    100% {
-        width: 50%;
-    }
-}
-
-@keyframes mainpageright {
-    0% {
-        opacity: 0;
-        width: 0;
-    }
-    70% {
-        opacity: 0;
-        width: 50%;
-    }
-    100% {
-        opacity: 1;
-        width: 50%;
     }
 }
 

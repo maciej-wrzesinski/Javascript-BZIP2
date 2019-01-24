@@ -4,15 +4,15 @@
 
         <meta charset="UTF-8">
 
-        <title>Maciej Wrzesiński Portfolio</title>
+        <title>BZIP2</title>
 
         <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Orbitron" rel="stylesheet">
 
         <link rel="stylesheet" href="./assets/css/main.css" type="text/css" />
 
         <script src="./assets/js/jquery-1.12.4.min.js"></script>
-        <script src="./assets/js/encoding.min.js"></script>
         <script src="./assets/js/main.js"></script>
+        <script src="./assets/js/base64.js"></script>
         <script src="./assets/js/bzip2.js"></script>
 
     </head>
@@ -61,20 +61,20 @@
                         <div id="leftmainpage" class="half left">
                             <div class="minipage">
 
-                                <div id="myform">
+                                <div class="minipaneltext">
                                     <div>
-                                        <input id="myfile" type="file" name="files[]" multiple="" />
-                                        <label for="myfile">Choose a file<p class="underline_normal"></p></label>
+                                        <textarea id="inputarea"></textarea>
                                     </div>
 
-                                    <div id="text"></div>
-
-                                    <span id="file_name" class="minipaneltext gray"></span><br />
-
-                                    <span id="file_encoding" class="minipaneltext gray"></span><br />
-
-                                    <span id="file_size" class="minipaneltext gray"></span><br />
-
+                                    <div>
+                                        <div id="compress" class="submit_button">
+                                            COMPRESS
+                                        </div>
+                                        /
+                                        <div id="decompress" class="submit_button">
+                                            deCOMPRESS
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -84,21 +84,13 @@
                             <div class="minipage">
 
                                 <div class="minipaneltext">
-                                    <span class="mainpagetext">Methods of Compression</span>
-                                    <div class="centeredcheckbox">
-                                        <input type="checkbox" checked id="BS" name="BS" value="BS">
-                                        <label for="BS"><div id="BSc" class="checked">1</div> Block-Sort</label>
-                                        <input type="checkbox" checked id="MTF" name="MTF" value="MTF"><br />
-                                        <label for="MTF"><span id="MTFc" class="checked">1</span> Move To Front</label>
-                                        <input type="checkbox" checked id="HA" name="HA" value="HA"><br />
-                                        <label for="HA"><span id="HAc" class="checked">1</span> Huffmans</label>
+                                    <div>
+                                        <textarea id="outputarea"></textarea>
                                     </div>
-
-                                    <span id="compression_state" class="mainpagetext minipaneltext gray">Set to a full Bzip2 compression method</span>
 
                                     <div>
                                         <div class="submit_button">
-                                            COMPRESS
+                                            Result
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +108,8 @@
 
                             BZIP2 is a lossless data compression algorithm, it is available on a BSD based license.<br />
                             It uses Burrows-Wheelers transform into Move To Front ending with Huffmans algorithm.<br />
-                            Similar to GZIP but slower. Has bigger compression rate in most cases.
+                            Similar to GZIP but slower. Has bigger compression rate in most cases.<br />
+                            Developed by Julian Seward
 
                         </div>
                     </div>
@@ -126,7 +119,7 @@
                     <div class="container minipage">
                         <div class="bigcenteredtext">
                             You can look at more of my code at<br />
-                            <span class="gray"><a href="https://github.com/maciej-wrzesinski/">https://github.com/maciej-wrzesinski/</a></span><br /><br />
+                            <span class="gray"><a href="https://github.com/maciej-wrzesinski/" target="_blank">https://github.com/maciej-wrzesinski/</a></span><br /><br />
                             I do mostly web related things
                         </div>
                     </div>

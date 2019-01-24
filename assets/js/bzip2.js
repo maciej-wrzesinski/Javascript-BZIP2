@@ -2,24 +2,18 @@
 /* BZIP2 algorithm */
 
 $().ready(function() {
-    const bzip2 = new BZIP2();
-    let text = 'Lorem ipsum. Siemanko! Lorem ipsum. Siemanko! Lorem ipsum. Siemanko! Lorem ipsum. Siemanko! Lorem ipsum. Siemanko! Lorem ipsum. Siemanko!';
-    let compressedText = bzip2.compress(text);
-
-    let decompressedText = bzip2.decompress(compressedText);
-    console.log('origi ' + text);
-    console.log('compr ' + compressedText);
-    console.log('decom ' + decompressedText);
-    console.log(text + ' === ' + decompressedText);
-    console.log('work? ' + (text === decompressedText));
+    //let bzip2 = new BZIP2();
+    //bzip2.decompress(bzip2.compress('hehexd'));
 });
 
 function BZIP2() {
-    var debug = true;
+    var debugLog = true;
+    var debugBits = false;
+    var debugTime = true;
     var that = this;
     this.originalStartingIndex = 0;
     this.maxChar = 0;
-    this.huffmanCharToBinary = new Array();
+    this.huffmanCharToBinary = [];
 
     /* usable methods */
 
@@ -30,48 +24,39 @@ function BZIP2() {
                 this.maxChar = dataString[i].charCodeAt(0);
         this.maxChar++;
 
-        this.huffmanCharToBinary = new Array();
+        this.huffmanCharToBinary = [];
 
-        if (debug) {
+        if (debugLog) {
             console.log('---------------------- THIS IS ORIGINAL');
             console.log(dataString);
 
-            console.log('---------------------- ORIGINAL TO BITS');
-            console.log(countNumberOfBits(dataString));
+            if (debugBits) {
+                console.log('---------------------- ORIGINAL TO BITS');
+                console.log(countNumberOfBits(dataString));
+            }
 
             console.log('----------------------');
+            console.log('');
+            console.log('');
         }
 
-        return doHuffmans(doMoveToFront(doBurrowsWheelerTransform(dataString)));
-        //return doMoveToFront(doBurrowsWheelerTransform(dataString));
-        //return doHuffmans(dataString); YES
-    }
+        return doShortenAndBase64(doHuffmans(doMoveToFront(doBurrowsWheelerTransform(dataString))));
+    };
 
     this.decompress = function(dataString) {
-        return undoBurrowsWheelerTransform(undoMoveToFront(undoHuffmans(dataString)));
-        //return undoBurrowsWheelerTransform(undoMoveToFront(dataString));
-        //return undoHuffmans(dataString);
-    }
+        return undoBurrowsWheelerTransform(undoMoveToFront(undoHuffmans(undoShortenAndBase64(dataString))));
+    };
 
     /* private methods that private methods below use */
 
-    let transformBytesToChars = function (dataString) {
-        //dataString = dataString.slice();
-        let finalString = new Array();
-        while (dataString.length) {
-            finalString.push(String.fromCharCode(parseInt(dataString.slice(0, 8), 2)));
-            dataString = dataString.slice(8, dataString.length);
-        }
-    }
-
     let countNumberOfBits = function (dataString) {
-        let finalString = new Array();
+        let finalString = [];
         for (let i = 0; i < dataString.length; i++) {
             finalString[i] = dataString[i].charCodeAt(0).toString(2);
         }
 
         return finalString.join(' ');
-    }
+    };
 
     let sortWithIndeces = function (originalArray) {
         let size = originalArray.length;
@@ -122,11 +107,16 @@ function BZIP2() {
         else if(Array.isArray(tree) && tree.length === 2) { //if this is a leaf
             that.huffmanCharToBinary.push([binarycode, tree[1]]); // create char to binary table
         }
-    }
+    };
 
     /* private methods */
 
     let doBurrowsWheelerTransform = function(dataString) {
+        let time1;
+        if (debugTime) {
+            time1 = performance.now();
+        }
+
         let size = dataString.length;
         dataString = dataString.split('');
         let transformedString;
@@ -149,19 +139,30 @@ function BZIP2() {
 
         finalText = finalText.join('');
 
-        if (debug) {
+        if (debugLog) {
             console.log('---------------------- THIS IS BURROWS');
             console.log(finalText);
 
-            console.log('---------------------- BURROWS TO BITS');
-            console.log(countNumberOfBits(finalText));
+            if (debugBits) {
+                console.log('---------------------- BURROWS TO BITS');
+                console.log(countNumberOfBits(finalText));
+            }
 
             console.log('----------------------');
         }
+        if (debugTime) {
+            console.log('BURROWS TIME ' + (performance.now() - time1) + ' MS');
+        }
+
         return finalText;
-    }
+    };
 
     let undoBurrowsWheelerTransform = function(dataString) {
+        let time1;
+        if (debugTime) {
+            time1 = performance.now();
+        }
+
         let size = dataString.length;
         dataString = dataString.split('');
         let theArray = new Array(size).fill('');
@@ -184,16 +185,24 @@ function BZIP2() {
             finalText[j] = theArray[i][that.originalStartingIndex];
         }
 
-        if (debug) {
+        if (debugLog) {
             console.log('---------------------- THIS IS UNDO BURROWS');
-            console.log(finalText.join('').slice())
+            console.log(finalText.join('').slice());
             console.log('----------------------');
+        }
+        if (debugTime) {
+            console.log('UNDO BURROWS TIME ' + (performance.now() - time1) + ' MS');
         }
 
         return finalText.join('');
-    }
+    };
 
     let doMoveToFront = function(dataString) {
+        let time1;
+        if (debugTime) {
+            time1 = performance.now();
+        }
+
         let size = dataString.length;
         dataString = dataString.split('');
         finalString = new Array(size);
@@ -207,7 +216,7 @@ function BZIP2() {
 
             let chosenIndex = 0;
             for (let j = 0; j < that.maxChar; j++) {
-                if (dataString[i].charCodeAt(0) == charsArray[j]) {
+                if (dataString[i].charCodeAt(0) === charsArray[j]) {
                     chosenIndex = j;
                     break;
                 }
@@ -223,26 +232,37 @@ function BZIP2() {
             textString[i] = String.fromCharCode(finalString[i]);
         textString = textString.join('');
 
-        if (debug) {
+        if (debugLog) {
             console.log('---------------------- THIS IS FRONT');
             console.log(textString);
-            console.log('---------------------- FRONT TO BITS');
 
-            console.log(countNumberOfBits(textString));
+            if (debugBits) {
+                console.log('---------------------- FRONT TO BITS');
+                console.log(countNumberOfBits(textString));
+            }
 
             console.log('----------------------');
         }
+        if (debugTime) {
+            console.log('FRONT TIME ' + (performance.now() - time1) + ' MS');
+        }
 
         return textString;
-    }
+    };
 
     let undoMoveToFront = function(dataString) {
+        let time1;
+        if (debugTime) {
+            time1 = performance.now();
+        }
+
         let size = dataString.length;
         finalString = new Array(size);
+        if (that.maxChar < 50) that.maxChar = 1024; //THIS IS AN ABOMINATION AND SHOULD BE
         let charsArray = new Array(that.maxChar);
 
         //undoing int to char, that was the most stupid thing i coded
-        tempString = new Array();
+        tempString = [];
         for (let i = 0; i < size; i++) {
             tempString.push(dataString[i].charCodeAt(0));
         }
@@ -270,19 +290,26 @@ function BZIP2() {
             finalString[i] = String.fromCharCode(finalString[i]);
         }
 
-        if (debug) {
+        if (debugLog) {
             console.log('---------------------- THIS IS UNDO FRONT');
-            console.log(finalString.join('').slice())
+            console.log(finalString.join('').slice());
             console.log('----------------------');
+        }
+        if (debugTime) {
+            console.log('UNDO FRONT TIME ' + (performance.now() - time1) + ' MS');
         }
 
         return finalString.join('');
-    }
+    };
 
-    let doHuffmans = function(dataString)   {
+    let doHuffmans = function(dataString) {
+        let time1;
+        if (debugTime) {
+            time1 = performance.now();
+        }
+
         let size = dataString.length;
-
-        let bucket = new Array();
+        let bucket = [];
 
         for (let i = 0; i < that.maxChar; i++) {
             bucket[i] = new Array(2).fill(-1);
@@ -295,7 +322,7 @@ function BZIP2() {
 
         let minus = 0;
         for (let i = 0; i < size; i++) {
-            if(bucket[transformedString[i]][0] == -1)
+            if(bucket[transformedString[i]][0] === -1)
                 minus++;
             bucket[transformedString[i]][0]++;
             bucket[transformedString[i]][1] = transformedString[i];
@@ -318,7 +345,7 @@ function BZIP2() {
 
         //create tree onto the bucket
         while (bucket.length > 1) {
-            let tempNode = [bucket[1][0]+bucket[0][0], bucket[0], bucket[1]]
+            let tempNode = [bucket[1][0]+bucket[0][0], bucket[0], bucket[1]];
 
             bucket = bucket.slice(2);
 
@@ -342,27 +369,40 @@ function BZIP2() {
         //now while we have the original array with the chars and a char-to-binary table we can convert the original to binary
         for (let i = 0; i < size; i++)
             for (let j = 0; j < that.huffmanCharToBinary.length; j++)
-                if (that.huffmanCharToBinary[j][1] == transformedString[i]) {
+                if (that.huffmanCharToBinary[j][1] === transformedString[i]) {
                     transformedString[i] = that.huffmanCharToBinary[j][0];
                     j = that.huffmanCharToBinary.length;
                 }
 
         transformedString = transformedString.join(''); // so THIS is the FINAL binary string
 
+        for (let i = 0; i < that.huffmanCharToBinary.length; i++) //swap every 0 and 1 to some chars :|
+            if (String.fromCharCode(that.huffmanCharToBinary[i][1]) === '1')
+                that.huffmanCharToBinary[i][1] = -1;
+            else if (String.fromCharCode(that.huffmanCharToBinary[i][1]) === '0')
+                that.huffmanCharToBinary[i][1] = -2;
+
         let huffmanTreeString = '';
         for (let i = 0; i < that.huffmanCharToBinary.length; i++)
             huffmanTreeString = huffmanTreeString + that.huffmanCharToBinary[i][0] + String.fromCharCode(that.huffmanCharToBinary[i][1]);
 
-        if (debug) {
+        if (debugLog) {
             console.log('---------------------- THIS IS HUFFMAN');
             console.log(huffmanTreeString.slice() + ' ' + transformedString.slice());
             console.log('----------------------');
         }
+        if (debugTime) {
+            console.log('HUFFMAN TIME ' + (performance.now() - time1) + ' MS');
+        }
 
         return huffmanTreeString + ' ' + transformedString;
-    }
+    };
 
     let undoHuffmans = function(dataString) {
+        let time1;
+        if (debugTime) {
+            time1 = performance.now();
+        }
 
         //split the tree and data
         let huffmanTreeArray;
@@ -381,15 +421,21 @@ function BZIP2() {
             //if there is no such thing in there AND if they found a full string from 'char' to 'char' (this means that binary string found is a perfect full
             if (
                 huffmanTreeArray.includes(searchedBinary) &&
-                huffmanTreeArray[huffmanTreeArray.indexOf(searchedBinary)-1] != '0' &&
-                huffmanTreeArray[huffmanTreeArray.indexOf(searchedBinary)-1] != '1' &&
-                huffmanTreeArray[huffmanTreeArray.indexOf(searchedBinary)+searchedBinary.length] != '0' &&
-                huffmanTreeArray[huffmanTreeArray.indexOf(searchedBinary)+searchedBinary.length] != '1'
+                huffmanTreeArray[huffmanTreeArray.indexOf(searchedBinary)-1] !== '0' &&
+                huffmanTreeArray[huffmanTreeArray.indexOf(searchedBinary)-1] !== '1' &&
+                huffmanTreeArray[huffmanTreeArray.indexOf(searchedBinary)+searchedBinary.length] !== '0' &&
+                huffmanTreeArray[huffmanTreeArray.indexOf(searchedBinary)+searchedBinary.length] !== '1'
             ) {
 
-                //console.log(searchedBinary)
+                let newAddition = huffmanTreeArray[huffmanTreeArray.indexOf(searchedBinary)+searchedBinary.length];
+                //Inverse 'swap every 0 and 1 to some chars :|'
+                if (newAddition === String.fromCharCode(-1))
+                    newAddition = '1';
+                else if (newAddition === String.fromCharCode(-2))
+                    newAddition = '0';
+
                 //add to the final string a 'translated' data
-                finalString = finalString + huffmanTreeArray[huffmanTreeArray.indexOf(searchedBinary)+searchedBinary.length]
+                finalString = finalString + newAddition;
                 //reset the searched binary string
                 searchedBinary = '';
             }
@@ -397,33 +443,133 @@ function BZIP2() {
             dataString = dataString.slice(1, dataString.length);
             //console.log(searchedBinary + ' ' + dataString)
         }
-        console.log(searchedBinary.slice())
 
-
-        /*let searchedBinary = '';
-        dataString = dataString + 'X'; //so the loop below works
-        while (dataString.length) {
-            searchedBinary = searchedBinary + dataString.slice(0, 1);
-            dataString = dataString.slice(1, dataString.length);
-
-            //if there is no such thing in there AND if they found a full string from 'char' to 'char' (this means that binary string found is a perfect full
-            if (!huffmanTreeArray.includes(searchedBinary)) {
-                //get the searched string right
-                let trueBinaryString = searchedBinary.slice(0, searchedBinary.length-1);
-                //shorten the usual searched string so that next iteration has a valid one
-                searchedBinary = searchedBinary.slice(searchedBinary.length-1, searchedBinary.length);
-                //add to the final string a 'translated' data
-                finalString = finalString + huffmanTreeArray[huffmanTreeArray.indexOf(trueBinaryString)+trueBinaryString.length];
-            }
-        }*/
-
-        if (debug) {
+        if (debugLog) {
             console.log('---------------------- THIS IS UNDO HUFFMAN');
-            console.log(huffmanTreeArray.slice())
-            console.log(finalString.slice())
+            console.log(huffmanTreeArray.slice());
+            console.log(finalString.slice());
             console.log('----------------------');
+        }
+        if (debugTime) {
+            console.log('UNDO HUFFMAN TIME ' + (performance.now() - time1) + ' MS');
         }
 
         return finalString;
-    }
+    };
+
+    let doShortenAndBase64 = function (dataString) {
+        let time1;
+        if (debugTime) {
+            time1 = performance.now();
+        }
+
+        //WE CANNOT USE THIS BECAUSE BINARY STRINGS CAN START WITH LEADING ZEROS THAT ARE IMPORTANT !!!
+        //AND WE CANNOT RECOVER IT THIS WAY
+        /*
+        //split the tree and data
+        let huffmanTreeArray;
+        for (let i = dataString.length; i > 0; i--)
+            if (dataString[i] === ' ') {
+                huffmanTreeArray = dataString.slice(0, i);
+                dataString = dataString.slice(i+1, dataString.length);
+                break;
+            }
+
+        //change data from 8 bit binary to chars!
+        let charDataString = '';
+        while (dataString.length) {
+            charDataString = charDataString + String.fromCharCode(parseInt(dataString.slice(0, 8), 2));
+            dataString = dataString.slice(8, dataString.length);
+        }
+
+        //(since there are some 0 and 1 as data in the tree) change huffman tree from bit binary to chars!
+        //then we can easily revert this change by changing chars (index_of_char/2) to bit strings
+        let newHuffmanTreeArray = '';
+        let tempBinaryString = '';
+
+        for (let i = 0; i < huffmanTreeArray.length; i++) {
+            if (huffmanTreeArray[i] !== '1' && huffmanTreeArray[i] !== '0') {
+                newHuffmanTreeArray = newHuffmanTreeArray + String.fromCharCode(parseInt(tempBinaryString, 2));
+                tempBinaryString = '';
+
+                newHuffmanTreeArray = newHuffmanTreeArray + huffmanTreeArray[i];
+            }
+            else {
+                tempBinaryString = tempBinaryString + huffmanTreeArray[i];
+            }
+        }
+
+        dataString = newHuffmanTreeArray + ' ' + charDataString;
+
+        if (debugLog) {
+            console.log('---------------------- THIS IS BEFORE BASE64');
+            console.log(dataString);
+            console.log('----------------------');
+        }
+        */
+
+        dataString = Base64.encode(dataString);
+
+        if (debugLog) {
+            console.log('---------------------- THIS IS BASE64');
+            console.log(dataString);
+            console.log('----------------------');
+        }
+        if (debugTime) {
+            console.log('BASE64 TIME ' + (performance.now() - time1) + ' MS');
+        }
+
+        return dataString;
+    };
+
+    let undoShortenAndBase64 = function (dataString) {
+        let time1;
+        if (debugTime) {
+            time1 = performance.now();
+        }
+
+        dataString = Base64.decode(dataString);
+
+        //WE CANNOT USE THIS BECAUSE BINARY STRINGS CAN START WITH LEADING ZEROS THAT ARE IMPORTANT !!!
+        //AND WE CANNOT RECOVER IT THIS WAY
+        /*
+        if (debugLog) {
+            console.log('---------------------- THIS IS BEFORE UNDO BASE64');
+            console.log(dataString);
+            console.log('----------------------');
+        }
+
+        //split the tree and data
+        let huffmanTreeArray;
+        for (let i = dataString.length; i > 0; i--)
+            if (dataString[i] === ' ') {
+                huffmanTreeArray = dataString.slice(0, i);
+                dataString = dataString.slice(i+1, dataString.length);
+                break;
+            }
+
+        //chars to 8 bit binary!
+        let newHuffmanTreeString = '';
+        for (let i = 0; i < huffmanTreeArray.length; i += 2) {
+            newHuffmanTreeString = newHuffmanTreeString + huffmanTreeArray[i].charCodeAt(0).toString(2) + huffmanTreeArray[i + 1];
+        }
+        let newCharString = '';
+        for (let i = 0; i < dataString.length; i++) {
+            newCharString = newCharString + dataString[i].charCodeAt(0).toString(2);
+        }
+
+        dataString = newHuffmanTreeString + ' ' + newCharString;
+        */
+
+        if (debugLog) {
+            console.log('---------------------- THIS IS UNDO BASE64');
+            console.log(dataString);
+            console.log('----------------------');
+        }
+        if (debugTime) {
+            console.log('UNDO BASE64 TIME ' + (performance.now() - time1) + ' MS');;
+        }
+
+        return dataString;
+    };
 }
