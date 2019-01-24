@@ -62,7 +62,7 @@ const forceScroll = function (upordown) {
     let moved = 0;
     if (canScrollMore === 1) {
         canScrollMore = 0;
-        $('.href').each(function (i) {
+        $('.js-href').each(function (i) {
 
             if (i === pageCurrent - upordown && moved === 0) {
                 $(this).click();
@@ -99,7 +99,7 @@ const buttonsInit = function () {
         $(pageArray[i]).css('width', pageWidth + '%');
     });
 
-    $('.href')
+    $('.js-href')
     //Make first one already highlighted on start
         .each(function(i) {
 
@@ -116,7 +116,7 @@ const buttonsInit = function () {
         $(this).on("click", function(){
 
             if( pageCurrent !== i) {
-                $('.href').children('p').fadeOut();
+                $('.js-href').children('p').fadeOut();
                 $(this).children('p').fadeIn();
             }
 
@@ -145,7 +145,7 @@ const buttonsInit = function () {
 const countdownInit = function () {
 
     $('footer').hover(function () {
-        $('#joke').css('animation', 'fade-in 0.5s ease-out forwards');
+        $('#js-joke').css('animation', 'fade-in 0.5s ease-out forwards');
     });
     setInterval(countdownWork, 1, '#countdown');
 };

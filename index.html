@@ -3,17 +3,20 @@
     <head>
 
         <meta charset="UTF-8">
-
-        <title>BZIP2</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Orbitron" rel="stylesheet">
 
+        <link rel="stylesheet" href="./assets/css/bootstrap.min.css" type="text/css" />
         <link rel="stylesheet" href="./assets/css/main.css" type="text/css" />
 
         <script src="./assets/js/jquery-1.12.4.min.js"></script>
+        <script src="./assets/js/bootstrap.min.js"></script>
+        <script src="./assets/js/base64.min.js"></script>
         <script src="./assets/js/main.js"></script>
-        <script src="./assets/js/base64.js"></script>
         <script src="./assets/js/bzip2.js"></script>
+
+        <title>BZIP2</title>
 
     </head>
     <body>
@@ -29,23 +32,35 @@
 
         <header>
 
-            <div class="post-load left">
-                <div class="logo left thirty">
+            <nav class="navbar navbar-expand-lg navbar-dark row">
+                <div class="col-3 col-md-2 col-lg-4 left logo">
                     <span class="white">BZIP</span><span class="yellow">2</span>
                 </div>
-                <div class="logo right seventy">
+                <div class="col-6 col-lg-4 left logo2">
                     <div class="typewriter typewritertop white">Lossless Data Compression Algorithm</div>
-                    <div class="typewriter typewriterbottom white">made with javascript</div>
-                    <hr class="left">
+                    <div class="d-none d-md-block typewriter typewriterbottom white">made with javascript</div>
+                    <hr class="d-none d-md-block left">
                 </div>
-            </div>
 
-            <nav>
-                <ul class="white">
-                    <li class="href"><span class="numeric">00.</span> Home <p class="hr"></p></li>
-                    <li class="href"><span class="numeric">01.</span> Description <p class="hr"></p></li>
-                    <li class="href"><span class="numeric">10.</span> GitHub <p class="hr"></p></li>
-                </ul>
+                <button id="burger" class="mr-4 navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="col-lg-4 collapse navbar-collapse">
+                    <ul class="navbar-nav white">
+                        <li class="nav-item js-href"><span class="numeric">00.</span> Home <p class="hr"></p></li>
+                        <li class="nav-item js-href"><span class="numeric">01.</span> Description <p class="hr"></p></li>
+                        <li class="nav-item js-href"><span class="numeric">10.</span> GitHub <p class="hr"></p></li>
+                    </ul>
+                </div>
+
+                <div id="mobile-menu">
+                    <ul class="navbar-nav white">
+                        <li class="nav-item js-href"><span class="numeric">1.</span> Home <p class="hr"></p></li>
+                        <li class="nav-item js-href"><span class="numeric">2.</span> Description <p class="hr"></p></li>
+                        <li class="nav-item js-href"><span class="numeric">3.</span> GitHub <p class="hr"></p></li>
+                    </ul>
+                </div>
             </nav>
 
             <div style="clear: both;"></div>
@@ -56,7 +71,7 @@
             <div id="pages-wrapper" class="white">
                 <div id="page0" class="page left">
 
-                    <div class="container">
+                    <div class="page_container">
 
                         <div id="leftmainpage" class="half left">
                             <div class="minipage">
@@ -103,7 +118,8 @@
                 </div>
 
                 <div id="page1" class="page left">
-                    <div class="container minipage">
+
+                    <div class="page_container minipage">
                         <div class="bigcenteredtext">
 
                             BZIP2 is a lossless data compression algorithm, it is available on a BSD based license.<br />
@@ -113,23 +129,26 @@
 
                         </div>
                     </div>
+
                 </div>
 
                 <div id="page2" class="page left">
-                    <div class="container minipage">
+
+                    <div class="page_container minipage">
                         <div class="bigcenteredtext">
                             You can look at more of my code at<br />
-                            <span class="gray"><a href="https://github.com/maciej-wrzesinski/" target="_blank">https://github.com/maciej-wrzesinski/</a></span><br /><br />
+                            <span class="gray"><a href="https://github.com/maciej-wrzesinski/" target="_blank">github.com/maciej-wrzesinski/</a></span><br /><br />
                             I do mostly web related things
                         </div>
                     </div>
+
                 </div>
 
             </div>
         </main>
 
         <footer>
-            I am computing something very important... <span id="countdown">000000000000000000</span> ...Do not mind me<span id="joke">. Just kidding nothing interesting here :)</span>
+            I am computing something very important... <span id="countdown">000000000000000000</span> ...Do not mind me<span id="js-joke">. Just kidding nothing interesting here :)</span>
         </footer>
 
         <script>

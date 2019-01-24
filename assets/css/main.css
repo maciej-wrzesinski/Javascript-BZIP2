@@ -39,21 +39,14 @@ header {
     border-bottom: 1px #353535 solid;
 }
 
-#joke {
-    opacity: 0;
-}
-
 nav
 {
     height: 95px;
     margin-top: 5px;
-    width: 25%;
-    float: left;
     animation: fade-in 0.5s ease-out forwards;
-    animation-delay: 2.75s;
-    opacity: 0;
+    animation-delay: 0.0s;
     transform-origin: left;
-    text-align: center;
+    opacity: 0;
 }
 
 a
@@ -67,18 +60,20 @@ ul
 {
     padding: 0;
     margin: 0;
-    list-style-type: none;
     font-size: 15px;
-    display: inline-block;
-    line-height: 95px;
     text-transform: uppercase;
+    justify-content: space-evenly;
+    width: 100%;
 }
 
 ul > li
 {
-    padding: 0 10px 0 10px;
-    float: left;
     cursor: pointer;
+}
+
+#burger {
+    border: none;
+    font-size: 30px;
 }
 
 .white {
@@ -107,7 +102,7 @@ ul > li
     width: 50%;
 }
 
-.container {
+.page_container {
     width: 100%;
     margin: 50px 0 auto;
 }
@@ -214,7 +209,7 @@ nav
 .underline {
     width: 100%;
     border-bottom: 1px solid #5600FF;
-    margin: -37px 4px 0 auto;
+    margin: auto;
 }
 
 .underline_normal {
@@ -241,6 +236,11 @@ Logo stuff
     height: 100px;
     line-height: 100px;
     text-align: center;
+}
+
+.logo2 {
+    height: 100px;
+    line-height: 50px;
 }
 
 .typewriter {
@@ -271,12 +271,7 @@ Pre-loader Post-loader stuff
     display: none;
 }
 
-.post-load {
-    width: 75%;
-    height: 100px;
-}
-
-.post-load hr {
+hr {
     width: 100%;
     background: #FEFCFF;
     animation: slide-right-hr 0.5s ease-out forwards;
@@ -284,14 +279,6 @@ Pre-loader Post-loader stuff
     transform: scaleX(0);
     transform-origin: left;
     margin-top: -50px;
-}
-
-.post-load .typewritertop {
-    line-height: 50px;
-}
-
-.post-load .typewriterbottom {
-    line-height: 50px;
 }
 
 .post-load :first-child {
@@ -426,3 +413,7 @@ Pre-loader Post-loader stuff
     display: block;
     text-align: center;
 }
+
+#js-joke { opacity: 0; }
+
+.js-http { }
