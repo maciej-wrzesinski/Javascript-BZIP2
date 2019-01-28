@@ -1,19 +1,14 @@
 
 /* BZIP2 algorithm */
 
-$().ready(function() {
-    //let bzip2 = new BZIP2();
-    //bzip2.decompress(bzip2.compress('hehexd'));
-});
-
 function BZIP2() {
     var debugLog = true;
     var debugBits = false;
-    var debugTime = true;
+    var debugTime = false;
     var that = this;
     this.originalStartingIndex = 0;
     this.maxChar = 0;
-    this.huffmanCharToBinary = [];
+    this.huffmanCharToBinary = []; //this can be made into local variable
 
     /* usable methods */
 
@@ -463,9 +458,9 @@ function BZIP2() {
             time1 = performance.now();
         }
 
-        //WE CANNOT USE THIS BECAUSE BINARY STRINGS CAN START WITH LEADING ZEROS THAT ARE IMPORTANT !!!
-        //AND WE CANNOT RECOVER IT THIS WAY
-        /*
+        //method below changes binary to chars and then base64 it
+        //it shortens data by 70% compared to only base64 raw binary
+
         //split the tree and data
         let huffmanTreeArray;
         for (let i = dataString.length; i > 0; i--)
@@ -476,20 +471,21 @@ function BZIP2() {
             }
 
         //change data from 8 bit binary to chars!
+        //this(addin an additional bit) is super inefficient cause it widens the data string by too much.
+        //insted of this method we should search for strings that are length <=8 and have always leading zeros (impossible? has to add leadin zero at the beggining minimum)
         let charDataString = '';
         while (dataString.length) {
-            charDataString = charDataString + String.fromCharCode(parseInt(dataString.slice(0, 8), 2));
-            dataString = dataString.slice(8, dataString.length);
+            charDataString = charDataString + String.fromCharCode(parseInt('1' + dataString.slice(0, 6), 2)); //HERE add additional bit so we can recover leading zeros
+            dataString = dataString.slice(6, dataString.length);
         }
 
         //(since there are some 0 and 1 as data in the tree) change huffman tree from bit binary to chars!
         //then we can easily revert this change by changing chars (index_of_char/2) to bit strings
         let newHuffmanTreeArray = '';
         let tempBinaryString = '';
-
         for (let i = 0; i < huffmanTreeArray.length; i++) {
             if (huffmanTreeArray[i] !== '1' && huffmanTreeArray[i] !== '0') {
-                newHuffmanTreeArray = newHuffmanTreeArray + String.fromCharCode(parseInt(tempBinaryString, 2));
+                newHuffmanTreeArray = newHuffmanTreeArray + String.fromCharCode(parseInt('1' + tempBinaryString, 2)); //HERE add additional bit so we can recover leading zeros
                 tempBinaryString = '';
 
                 newHuffmanTreeArray = newHuffmanTreeArray + huffmanTreeArray[i];
@@ -506,7 +502,6 @@ function BZIP2() {
             console.log(dataString);
             console.log('----------------------');
         }
-        */
 
         dataString = Base64.encode(dataString);
 
@@ -530,11 +525,8 @@ function BZIP2() {
 
         dataString = Base64.decode(dataString);
 
-        //WE CANNOT USE THIS BECAUSE BINARY STRINGS CAN START WITH LEADING ZEROS THAT ARE IMPORTANT !!!
-        //AND WE CANNOT RECOVER IT THIS WAY
-        /*
         if (debugLog) {
-            console.log('---------------------- THIS IS BEFORE UNDO BASE64');
+            console.log('---------------------- THIS IS IN THE MIDDLE OF BASE64');
             console.log(dataString);
             console.log('----------------------');
         }
@@ -551,15 +543,14 @@ function BZIP2() {
         //chars to 8 bit binary!
         let newHuffmanTreeString = '';
         for (let i = 0; i < huffmanTreeArray.length; i += 2) {
-            newHuffmanTreeString = newHuffmanTreeString + huffmanTreeArray[i].charCodeAt(0).toString(2) + huffmanTreeArray[i + 1];
+            newHuffmanTreeString = newHuffmanTreeString + huffmanTreeArray[i].charCodeAt(0).toString(2).slice(1, 8) + huffmanTreeArray[i + 1]; // slice to get out the 1 bit from encoding
         }
         let newCharString = '';
         for (let i = 0; i < dataString.length; i++) {
-            newCharString = newCharString + dataString[i].charCodeAt(0).toString(2);
+            newCharString = newCharString + dataString[i].charCodeAt(0).toString(2).slice(1, 7); // slice to get out the 1 bit from encoding
         }
 
         dataString = newHuffmanTreeString + ' ' + newCharString;
-        */
 
         if (debugLog) {
             console.log('---------------------- THIS IS UNDO BASE64');
