@@ -11,9 +11,7 @@ $().ready(function() {
 
     let bzip2 = new BZIP2();
 
-    //textareastrigger
     triggerCompression(bzip2);
-
 });
 
 var pageArray = [];
@@ -25,36 +23,58 @@ var canScrollMore = 1;
 
 const triggerPageRotation = function () {
 
+    var canScroll = 1;
+
+    $('#inputarea')
+        .mouseover(function(){
+            canScroll = 0;
+        })
+        .mouseout(function(){
+            canScroll = 1;
+        });
+
+    $('#outputarea')
+        .mouseover(function(){
+            canScroll = 0;
+        })
+        .mouseout(function(){
+            canScroll = 1;
+        });
+
     $(window).bind('mousewheel', function(e) {
-        if (e.originalEvent.wheelDelta >= 0) {
-            forceScroll(1);
-        }
-        else {
-            forceScroll(-1);
+        if (canScroll === 1) {
+            if (e.originalEvent.wheelDelta >= 0) {
+                forceScroll(1);
+            }
+            else {
+                forceScroll(-1);
+            }
         }
     });
 
     $(document).keydown(function(e) {
-        switch(e.which) {
-            case 37: // left
-                forceScroll(1);
-                break;
+        if ($('#inputarea').prop("selectionStart") === 0 && $('#outputarea').prop("selectionStart") === 0) {
+            switch(e.which) {
+                case 37: // left
+                    forceScroll(1);
+                    break;
 
-            case 38: // up
-                forceScroll(1);
-                break;
+                case 38: // up
+                    forceScroll(1);
+                    break;
 
-            case 39: // right
-                forceScroll(-1);
-                break;
+                case 39: // right
+                    forceScroll(-1);
+                    break;
 
-            case 40: // down
-                forceScroll(-1);
-                break;
+                case 40: // down
+                    forceScroll(-1);
+                    break;
 
-            default: return; // exit this handler for other keys
+                default: return; // exit this handler for other keys
+            }
+            e.preventDefault(); // prevent the default action (scroll / move caret)
         }
-        e.preventDefault(); // prevent the default action (scroll / move caret)
     });
 };
 
