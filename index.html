@@ -8,7 +8,8 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Orbitron" rel="stylesheet">
 
         <link rel="stylesheet" href="./assets/css/bootstrap.min.css" type="text/css" />
-        <link rel="stylesheet" href="./assets/css/main.css" type="text/css" />
+        <link rel="stylesheet" href="./assets/css/main_backup.css" type="text/css" />
+        <link rel="stylesheet" href="./assets/css/javascript.css" type="text/css" />
 
         <script src="./assets/js/jquery-1.12.4.min.js"></script>
         <script src="./assets/js/bootstrap.min.js"></script>
@@ -21,33 +22,35 @@
     </head>
     <body>
 
-        <div id="loader-wrapper">
-            <div class="pre-load">
-                <div class="logo">
-                    <span class="white">BZIP</span><span class="yellow">2</span>
+        <div id="js-loader" class="pre-wrapper">
+            <div class="pre-load logo-main">
+                <div class="anim-pre-load-logo-main">
+                    BZIP<span class="color-yellow">2</span>
                 </div>
-                <div class="logo typewriter white">Lossless Data Compression Algorithm</div>
+                <div class="anim-pre-load-logo-sub">
+                    <span class="logo-sub">Lossless Data Compression Algorithm</span>
+                </div>
             </div>
         </div>
 
         <header>
 
             <nav class="navbar navbar-expand-lg navbar-dark row">
-                <div class="col-3 col-md-2 col-lg-4 left logo">
-                    <span class="white">BZIP</span><span class="yellow">2</span>
+                <div class="col-3 col-md-2 col-lg-4 float-left logo-main anim-post-load-logo-main">
+                    BZIP<span class="color-yellow">2</span>
                 </div>
-                <div class="col-6 col-lg-4 left logo2">
-                    <div class="typewriter typewritertop white">Lossless Data Compression Algorithm</div>
-                    <div class="d-none d-md-block typewriter typewriterbottom white">made with javascript</div>
-                    <hr class="d-none d-md-block left">
+                <div class="col-6 col-lg-4 float-left logo-sub anim-post-load-logo-sub">
+                    <div>Lossless Data Compression Algorithm</div>
+                    <div class="d-none d-md-block">made with javascript</div>
+                    <hr class="d-none d-md-block logo-hr anim-post-load-logo-hr">
                 </div>
 
                 <button id="burger" class="mr-4 navbar-toggler" type="button" data-toggle="collapse" data-target="#menu">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div id="menu" class="col-lg-4 collapse navbar-collapse">
-                    <ul class="navbar-nav white">
+                <div id="menu" class="col-lg-4 collapse navbar-collapse anim-post-load-nav">
+                    <ul class="navbar-nav">
                         <li class="nav-item js-href"><span class="numeric">00.</span> Home <p class="hr"></p></li>
                         <li class="nav-item js-href"><span class="numeric">01.</span> Description <p class="hr"></p></li>
                         <li class="nav-item js-href"><span class="numeric">10.</span> GitHub <p class="hr"></p></li>
@@ -55,17 +58,15 @@
                 </div>
             </nav>
 
-            <div style="clear: both;"></div>
-
         </header>
 
         <main>
-            <div id="pages-wrapper" class="white">
-                <div id="page0" class="page left">
+            <div id="pages-wrapper">
+                <div id="page0" class="page anim-post-load-page">
 
                     <div class="page_container">
 
-                        <div id="leftmainpage" class="half left">
+                        <div class="half float-left">
                             <div class="minipage">
 
                                 <div class="minipaneltext">
@@ -87,7 +88,7 @@
                             </div>
                         </div>
 
-                        <div id="rightmainpage" class="half left">
+                        <div class="half float-left">
                             <div class="minipage">
 
                                 <div class="minipaneltext">
@@ -96,9 +97,7 @@
                                     </div>
 
                                     <div>
-                                        <div class="submit_button">
-                                            Result
-                                        </div>
+                                        Result
                                     </div>
                                 </div>
 
@@ -109,7 +108,7 @@
 
                 </div>
 
-                <div id="page1" class="page left">
+                <div id="page1" class="page anim-post-load-page">
 
                     <div class="page_container minipage">
                         <div class="bigcenteredtext">
@@ -124,12 +123,12 @@
 
                 </div>
 
-                <div id="page2" class="page left">
+                <div id="page2" class="page anim-post-load-page">
 
                     <div class="page_container minipage">
                         <div class="bigcenteredtext">
                             You can look at more of my code at<br />
-                            <span class="gray"><a href="https://github.com/maciej-wrzesinski/" target="_blank">github.com/maciej-wrzesinski/</a></span><br /><br />
+                            <span class=""><a href="https://github.com/maciej-wrzesinski/" target="_blank">github.com/maciej-wrzesinski/</a></span><br /><br />
                             I do mostly web related things
                         </div>
                     </div>
@@ -139,20 +138,10 @@
             </div>
         </main>
 
-        <footer class="d-none d-md-block">
+        <footer class="d-none d-md-block anim-post-load-footer">
             I am computing something very important... <span id="countdown">000000000000000000</span> ...Do not mind me<span id="js-joke">. Just kidding nothing interesting here :)</span>
         </footer>
 
-        <script>
-            $('html').addClass('js');
-
-            $(window).load(function() {
-                setTimeout(
-                    function() {
-                        $("#loader-wrapper").fadeOut();
-                    }, 2000);
-            });
-        </script>
     </body>
 </html>
 

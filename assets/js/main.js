@@ -1,6 +1,13 @@
 
 /* Page related things */
 
+$(window).load(function() {
+    setTimeout(
+        function() {
+            $('#js-loader').fadeOut();
+        }, 2000);
+});
+
 $().ready(function() {
     //Initialize pages
     buttonsInit();
@@ -53,7 +60,7 @@ const triggerPageRotation = function () {
     });
 
     $(document).keydown(function(e) {
-        if ($('#inputarea').prop("selectionStart") === 0 && $('#outputarea').prop("selectionStart") === 0) {
+        if ($('#inputarea').prop('selectionStart') === 0 && $('#outputarea').prop('selectionStart') === 0) {
             switch(e.which) {
                 case 37: // left
                     forceScroll(1);
@@ -133,7 +140,7 @@ const buttonsInit = function () {
     //Make every button clickable
         .each(function(i) {
 
-        $(this).on("click", function(){
+        $(this).on('click', function(){
 
             if( pageCurrent !== i) {
                 $('.js-href').children('p').fadeOut();
@@ -180,13 +187,13 @@ const countdownWork = function (cssClass) {
 
     //reset when countdown ends
     if(countdownContent < 0){
-        countdownID.text("1111111111111111111");
+        countdownID.text('1111111111111111111');
         return;
     }
 
-    //add leading zeros
+    //add leading zeros for prettiness
     while(countdownContent.length < 19) {
-        countdownContent = "0" + countdownContent;
+        countdownContent = '0' + countdownContent;
     }
 
     countdownID.text(countdownContent);
