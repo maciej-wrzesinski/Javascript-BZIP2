@@ -8,7 +8,6 @@ function BZIP2() {
     var that = this;
     this.originalStartingIndex = 0;
     this.maxChar = 0;
-    this.huffmanCharToBinary = []; //this can be made into local variable
 
     /* usable methods */
 
@@ -18,8 +17,6 @@ function BZIP2() {
             if (dataString[i].charCodeAt(0) > this.maxChar)
                 this.maxChar = dataString[i].charCodeAt(0);
         this.maxChar++;
-
-        this.huffmanCharToBinary = [];
 
         if (debugLog) {
             console.log('---------------------- THIS IS ORIGINAL');
@@ -94,13 +91,13 @@ function BZIP2() {
         return array;
     };
 
-    let treeTraversal = function (tree, binarycode) {
+    let treeTraversal = function (tree, binaryCode, huffmanArray) {
         if(Array.isArray(tree) && tree.length === 3) { //if this is a sub-root
-            treeTraversal(tree[1], binarycode + "0"); //left traversal
-            treeTraversal(tree[2], binarycode + "1"); //right traversal
+            treeTraversal(tree[1], binaryCode + "0", huffmanArray); //left traversal
+            treeTraversal(tree[2], binaryCode + "1", huffmanArray); //right traversal
         }
         else if(Array.isArray(tree) && tree.length === 2) { //if this is a leaf
-            that.huffmanCharToBinary.push([binarycode, tree[1]]); // create char to binary table
+            huffmanArray.push([binaryCode, tree[1]]); // create char to binary table
         }
     };
 
@@ -298,6 +295,7 @@ function BZIP2() {
     };
 
     let doHuffmans = function(dataString) {
+
         let time1;
         if (debugTime) {
             time1 = performance.now();
@@ -315,6 +313,113 @@ function BZIP2() {
             transformedString[i] = dataString.charCodeAt(i);
         }
 
+
+        // problem: the data is too long and taking every single sign into account is too much and the compression level is low
+        // solution: MTF perfectly sorts data so the same signs are near each other.
+        // so to have more compression % we just have to take into account 2 letter words insted of pure letters
+
+        // anwser: cannot say if it makes more compressed strings, requered unit testing
+
+        //THIS IS TEST
+        //THIS IS TEST
+        //THIS IS TEST
+        /*
+        //so here we are making each letter into double lettered word (they are already sorted by MTF)
+        let transformedStringWithDouble = new Array(size);
+        for (let i = 0; i < size; i = i + 2) {
+            if (i+1 > size)
+                transformedStringWithDouble[i] = dataString[i];
+            else
+                transformedStringWithDouble[i] = dataString[i] + dataString[i+1];
+        }
+
+        //sort the result so it looks good and can be easily counted in the next step
+        transformedStringWithDouble.sort(function(left, right) {
+            return left < right ? -1 : 1;
+        });
+
+        //fill in the bucket where te words will be counted
+        let bucket2 = [];
+        for (let i = 0; i < transformedStringWithDouble.length/2; i++) {
+            bucket2[i] = new Array(2).fill(-1);
+        }
+
+        //count
+        let j = 0, k = 0;
+        do {
+            bucket2[j][0]++;
+            bucket2[j][1] = transformedStringWithDouble[k];
+
+            if (transformedStringWithDouble[k+1] !== transformedStringWithDouble[k])
+                j++;
+
+            k++;
+        } while (bucket2.length > k);
+
+        //delete empty part
+        bucket2 = bucket2.slice(0, j);
+
+        //+1 to every value because we initialized it with -1
+        for (let i = 0; i < bucket2.length; i++) {
+            bucket2[i][0]++;
+        }
+
+        //create tree onto the bucket
+        while (bucket2.length > 1) {
+            let tempNode = [bucket2[1][0]+bucket2[0][0], bucket2[0], bucket2[1]];
+
+            bucket2 = bucket2.slice(2);
+
+            bucket2.unshift(tempNode);
+
+            bucket2.sort(function(left, right) {
+                return left[0] < right[0] ? -1 : 1;
+            });
+        }
+
+        //make the tree starting from 2 nodes and a sum of their weights insted of just one node containing the main root
+        bucket2 = bucket2[0];
+
+
+        //now search the tree and make an array with char-to-binary values
+        let huffmanCharToBinary2 = new Array();
+        treeTraversal(bucket2, '', huffmanCharToBinary2);
+
+        huffmanCharToBinary2.sort(function(left, right) {
+            return left[0].length < right[0].length ? -1 : 1;
+        });
+
+        //now while we have the original array with the chars and a char-to-binary table we can convert the original to binary
+        for (let i = 0; i < size; i++)
+            for (let j = 0; j < huffmanCharToBinary2.length; j++)
+                if (huffmanCharToBinary2[j][1] === transformedStringWithDouble[i]) {
+                    transformedStringWithDouble[i] = huffmanCharToBinary2[j][0];
+                    j = huffmanCharToBinary2.length;
+                }
+
+        transformedStringWithDouble = transformedStringWithDouble.join(''); // so THIS is the FINAL binary string
+
+        for (let i = 0; i < huffmanCharToBinary2.length; i++) //swap every 0 and 1 to some chars :|
+            if (String.fromCharCode(huffmanCharToBinary2[i][1]) === '1')
+                huffmanCharToBinary2[i][1] = -1;
+            else if (String.fromCharCode(huffmanCharToBinary2[i][1]) === '0')
+                huffmanCharToBinary2[i][1] = -2;
+
+        let huffmanTreeString2 = '';
+        for (let i = 0; i < huffmanCharToBinary2.length; i++)
+            huffmanTreeString2 = huffmanTreeString2 + huffmanCharToBinary2[i][0] + String.fromCharCode(huffmanCharToBinary2[i][1]);
+
+        if (debugLog) {
+            console.log('---------------------- THIS IS HUFFMAN THAT HAS DOUBLE LETTERS');
+            console.log(huffmanTreeString2.slice() + ' ' + transformedStringWithDouble.slice());
+            console.log('----------------------');
+        }
+        */
+        //THIS IS TEST
+        //THIS IS TEST
+        //THIS IS TEST
+
+
         let minus = 0;
         for (let i = 0; i < size; i++) {
             if(bucket[transformedString[i]][0] === -1)
@@ -330,8 +435,6 @@ function BZIP2() {
 
         //delete empty part
         bucket = bucket.slice(that.maxChar-minus, that.maxChar);
-
-        let uniqueChars = bucket.slice();
 
         //+1 to every value because we initialized it with -1
         for (let i = 0; i < bucket.length; i++) {
@@ -355,31 +458,32 @@ function BZIP2() {
         bucket = bucket[0];
 
         //now search the tree and make an array with char-to-binary values
-        treeTraversal(bucket, '');
+        let huffmanCharToBinary = new Array();
+        treeTraversal(bucket, '', huffmanCharToBinary);
 
-        that.huffmanCharToBinary.sort(function(left, right) {
+        huffmanCharToBinary.sort(function(left, right) {
                 return left[0].length < right[0].length ? -1 : 1;
             });
 
         //now while we have the original array with the chars and a char-to-binary table we can convert the original to binary
         for (let i = 0; i < size; i++)
-            for (let j = 0; j < that.huffmanCharToBinary.length; j++)
-                if (that.huffmanCharToBinary[j][1] === transformedString[i]) {
-                    transformedString[i] = that.huffmanCharToBinary[j][0];
-                    j = that.huffmanCharToBinary.length;
+            for (let j = 0; j < huffmanCharToBinary.length; j++)
+                if (huffmanCharToBinary[j][1] === transformedString[i]) {
+                    transformedString[i] = huffmanCharToBinary[j][0];
+                    j = huffmanCharToBinary.length;
                 }
 
         transformedString = transformedString.join(''); // so THIS is the FINAL binary string
 
-        for (let i = 0; i < that.huffmanCharToBinary.length; i++) //swap every 0 and 1 to some chars :|
-            if (String.fromCharCode(that.huffmanCharToBinary[i][1]) === '1')
-                that.huffmanCharToBinary[i][1] = -1;
-            else if (String.fromCharCode(that.huffmanCharToBinary[i][1]) === '0')
-                that.huffmanCharToBinary[i][1] = -2;
+        for (let i = 0; i < huffmanCharToBinary.length; i++) //swap every 0 and 1 to some chars :|
+            if (String.fromCharCode(huffmanCharToBinary[i][1]) === '1')
+                huffmanCharToBinary[i][1] = -1;
+            else if (String.fromCharCode(huffmanCharToBinary[i][1]) === '0')
+                huffmanCharToBinary[i][1] = -2;
 
         let huffmanTreeString = '';
-        for (let i = 0; i < that.huffmanCharToBinary.length; i++)
-            huffmanTreeString = huffmanTreeString + that.huffmanCharToBinary[i][0] + String.fromCharCode(that.huffmanCharToBinary[i][1]);
+        for (let i = 0; i < huffmanCharToBinary.length; i++)
+            huffmanTreeString = huffmanTreeString + huffmanCharToBinary[i][0] + String.fromCharCode(huffmanCharToBinary[i][1]);
 
         if (debugLog) {
             console.log('---------------------- THIS IS HUFFMAN');

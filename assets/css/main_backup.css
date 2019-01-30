@@ -82,6 +82,7 @@ ul > li
 .half {
     text-align: center;
     width: 50%;
+    float: left;
 }
 
 .page_container {
