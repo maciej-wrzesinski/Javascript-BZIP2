@@ -36,7 +36,7 @@
         <header>
 
             <nav class="navbar navbar-expand-lg navbar-dark row">
-                <div class="col-3 col-md-2 col-lg-4 float-left logo-main anim-post-load-logo-main">
+                <div class="col-4 float-left logo-main anim-post-load-logo-main">
                     BZIP<span class="color-yellow">2</span>
                 </div>
                 <div class="col-6 col-lg-4 float-left logo-sub anim-post-load-logo-sub">
@@ -45,7 +45,7 @@
                     <hr class="d-none d-md-block logo-hr anim-post-load-logo-hr">
                 </div>
 
-                <button id="burger" class="mr-4 navbar-toggler" type="button" data-toggle="collapse" data-target="#menu">
+                <button id="burger" class="col-2 navbar-toggler" type="button">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -54,6 +54,20 @@
                         <li class="nav-item js-href"><span class="numeric">00.</span> Home <p class="hr"></p></li>
                         <li class="nav-item js-href"><span class="numeric">01.</span> Description <p class="hr"></p></li>
                         <li class="nav-item js-href"><span class="numeric">10.</span> GitHub <p class="hr"></p></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <nav id="mobile-menu" class="d-lg-none">
+                <div class="logo-main">
+                    BZIP<span class="color-yellow">2</span>
+                </div>
+
+                <div>
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><span class="numeric">00.</span> Home <p class="hr"></p></li>
+                        <li class="nav-item"><span class="numeric">01.</span> Description <p class="hr"></p></li>
+                        <li class="nav-item"><span class="numeric">10.</span> GitHub <p class="hr"></p></li>
                     </ul>
                 </div>
             </nav>
@@ -110,32 +124,40 @@
 
                 <div id="page1" class="page anim-post-load-page">
 
-                    <div class="page_container minipage">
-                        <div class="bigcenteredtext">
+                    <div class="page_container minipage bigcenteredtext">
 
                             BZIP2 is a lossless data compression algorithm, it is available on a BSD based license.<br />
                             It uses Burrows-Wheelers transform into Move To Front ending with Huffmans algorithm.<br />
                             Similar to GZIP but slower. Has bigger compression rate in most cases.<br />
-                            Developed by Julian Seward
+                            Original BZIP2 was developed by Julian Seward and this implementation is not the original
 
-                        </div>
                     </div>
 
                 </div>
 
                 <div id="page2" class="page anim-post-load-page">
 
-                    <div class="page_container minipage">
-                        <div class="bigcenteredtext">
-                            You can look at more of my code at<br />
-                            <span class=""><a href="https://github.com/maciej-wrzesinski/" target="_blank">github.com/maciej-wrzesinski/</a></span><br /><br />
+                    <div class="page_container minipage bigcenteredtext">
+
+                            You can look at more of my code at
+                            <br />
+                            <br />
+                            <a href="https://github.com/maciej-wrzesinski/" target="_blank">
+                                <img src="assets/img/GitHub-Mark-Light-120px-plus.png" />
+                                <br />
+                                <span class="smalltext">github.com/maciej-wrzesinski/</span>
+                            </a>
+                            <br />
                             I do mostly web related things
-                        </div>
+
                     </div>
 
                 </div>
 
             </div>
+
+            <div class="mobile-overlay"></div>
+
         </main>
 
         <footer class="d-none d-md-block anim-post-load-footer">

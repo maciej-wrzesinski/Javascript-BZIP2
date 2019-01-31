@@ -7,6 +7,11 @@ FEFCFF - white
 5600FF - blue
  */
 
+/*
+main
+NEEDS CLEANUP
+ */
+
 * {
     margin: 0;
     padding: 0;
@@ -16,12 +21,12 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
     background-color: #1C1C1B;
-    overflow: hidden;
+    overflow-x: hidden;
     color: #FEFCFF;
 }
 
 footer {
-    position: absolute;
+    position: fixed;
     right: 0;
     bottom: 0;
     left: 0;
@@ -31,6 +36,7 @@ footer {
     color: #FEFCFF;
     line-height: 50px;
     border-top: 1px #353535 solid;
+    background-color: #1C1C1B;
 }
 
 header {
@@ -40,14 +46,18 @@ header {
 nav
 {
     height: 95px;
-    margin-top: 5px;
 }
 
 a
 {
-    color: #858585;
+    color: #FEFCFF;
     text-decoration: none;
     display: block;
+}
+
+a:hover {
+    color: #FEFCFF;
+    text-decoration: none;
 }
 
 ul
@@ -76,7 +86,7 @@ ul > li
 
 .page {
     width: 100%;
-    float: left;
+    height: 500px;
 }
 
 .half {
@@ -95,8 +105,23 @@ ul > li
     padding-bottom: 40px;
 }
 
+.smalltext {
+    font-size: 15px;
+}
+
+.bigcenteredtext {
+    text-align: center;
+    font-size: 30px;
+}
+
+.minipaneltext {
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
 /*
 forms
+NEEDS CLEANUP
  */
 
 textarea {
@@ -123,16 +148,9 @@ textarea {
     display: inline-block;
 }
 
-.bigcenteredtext {
-    text-align: center;
-    font-size: 30px;
+button:focus{
+    outline: none;
 }
-
-.minipaneltext {
-    font-size: 13px;
-    text-transform: uppercase;
-}
-
 /*
 nav
  */
@@ -146,6 +164,37 @@ nav
     width: 100%;
     border-bottom: 1px solid #5600FF;
     margin: auto;
+}
+
+#mobile-menu {
+    display: none;
+    opacity: 0;
+    min-width: 250px;
+    max-width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background: #353535;
+    transition: all 1.5s ease-in-out;
+}
+
+.mobile-overlay {
+    display: none;
+    opacity: 0;
+    top: 0;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    transition: all 1.5s ease-in-out;
+}
+
+.visable {
+    display: block !important;
+    opacity: 1 !important;
 }
 
 /*
@@ -173,9 +222,27 @@ Logo stuff
 .logo-hr {
     width: 100%;
     background: #FEFCFF;
-    margin-top: -50px;
+    margin-top: -49px;
     float: left;
 }
+
+/*
+Scrollbar
+ */
+::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+    background-color: #1C1C1B;
+    transition: 0.9s;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #FFF000;
+    width: 5px;
+    border: 0;
+    transition: 0.7s;
+}
+
 
 /*
 Pre-loader Post-loader stuff
@@ -207,7 +274,6 @@ Pre-loader Post-loader stuff
 .anim-pre-load-logo-sub {
     animation: on-and-off 2s ease-out forwards;
 }
-
 
 .anim-post-load-logo-main {
     animation: logo-slide-right 0.5s ease-out forwards;

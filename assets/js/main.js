@@ -1,32 +1,72 @@
 
 /* Page related things */
 
-$(window).load(function() {
-    setTimeout(
-        function() {
-            $('#js-loader').fadeOut();
-        }, 2000);
-});
-
-$().ready(function() {
-    //Initialize pages
-    buttonsInit();
-    countdownInit();
-
-    //Work out the scrolling and arrows
-    triggerPageRotation();
-
-    let bzip2 = new BZIP2();
-
-    triggerCompression(bzip2);
-});
-
 var pageArray = [];
 var pagePosition = [];
 var pageCurrent = 0;
 var pageWidth = 0;
 
 var canScrollMore = 1;
+
+var isMobile = 0;
+
+$(window)
+    .load(function() {
+        setTimeout(
+            function() {
+                $('#js-loader').fadeOut();
+            }, 2000);
+    })
+    .on('resize', function(){
+        setMobile();
+        buttonsInit();
+    });
+
+$().ready(function() {
+    //Pagination on mobile
+    setMobile();
+
+    //Initialize pages
+    buttonsInit();
+
+    //Little counter on footer
+    countdownInit();
+
+    //Work out the scrolling and arrows
+    triggerPageRotation();
+
+    //turn off all animations after x seconds so the resize works fine
+
+    //BZIP2 work work work
+    let bzip2 = new BZIP2();
+    triggerCompression(bzip2);
+
+
+    //test
+
+
+    $('#burger').on('click', function () {
+        $('#mobile-menu').toggleClass('visable');
+        $('.mobile-overlay').fadeToggle();
+    });
+    $('.mobile-overlay').on('click', function () {
+        $('#mobile-menu').toggleClass('visable');
+        $('.mobile-overlay').fadeToggle();
+    });
+
+});
+
+const setMobile = function () {
+    if ($(window).width() <= 991) {
+        isMobile = 1;
+    }
+    else {
+        isMobile = 0;
+    }
+
+    //set the mobile page height to just right
+    $('.page').css('height', $(window).height()-$('footer').height()-$('nav').height());
+}
 
 const triggerPageRotation = function () {
 
@@ -104,69 +144,89 @@ const forceScroll = function (upordown) {
 
 const updatePages = function () {
     $('.page').each(function(i) {
-        $(pageArray[i]).css('transform', 'translateX(' + pagePosition[i] + '%)');
+        if (isMobile === 0)
+            $(pageArray[i]).css('transform', 'translateX(' + pagePosition[i] + '%)');
+        else
+            $(pageArray[i]).css('transform', '');
     });
 };
 
 const buttonsInit = function () {
+    //reset the scroll so the pagination works always when resized
+    pageCurrent = 0;
 
     $('.page')
-    //count pages and transform them
+    //count pages
         .each(function(i) {
 
-        $('#pages-wrapper').css('width', 100*(i+1) + '%');
-        pageWidth = 100/(i+1);
-    })
-
+            if (isMobile === 0) {
+                $('#pages-wrapper').css('width', 100 * (i + 1) + '%');
+                pageWidth = 100 / (i + 1);
+            }
+            else {
+                $('#pages-wrapper').css('width', '');
+            }
+        })
+    //and transform them
         .each(function(i) {
-        pageArray[i] = '#page' + i;
-        pagePosition[i] = 100 * i;
-        $(pageArray[i]).css('transform', 'translateX(' + pagePosition[i] + '%)');
 
-        $(pageArray[i]).css('width', pageWidth + '%');
-    });
+            pageArray[i] = '#page' + i;
+            pagePosition[i] = 100 * i;
+
+            if (isMobile === 0) {
+                $(pageArray[i])
+                    .css('transform', 'translateX(' + pagePosition[i] + '%)')
+                    .css('width', pageWidth + '%')
+                    .css('float', 'left');
+            }
+            else {
+                $(pageArray[i])
+                    .css('transform', '')
+                    .css('width', '')
+                    .css('float', '');
+            }
+        });
 
     $('.js-href')
     //Make first one already highlighted on start
         .each(function(i) {
 
-        if(i === 0)
-            $(this).children('p').addClass('underline').fadeIn();
+            if(i === 0)
+                $(this).children('p').addClass('underline').fadeIn();
 
-        else
-            $(this).children('p').addClass('underline').fadeOut();
-    })
-
+            else
+                $(this).children('p').addClass('underline').fadeOut();
+        })
     //Make every button clickable
         .each(function(i) {
 
-        $(this).on('click', function(){
+            $(this).on('click', function(){
 
-            if( pageCurrent !== i) {
-                $('.js-href').children('p').fadeOut();
-                $(this).children('p').fadeIn();
-            }
-
-            while(pageCurrent !== i) {
-                if(pageCurrent > i) {//odejmujemy
-                    $('.page').each(function (i, obj) {
-                        pagePosition[i] += 200;
-                    });
-                    updatePages();
-                    pageCurrent--;
+                if( pageCurrent !== i) {
+                    $('.js-href').children('p').fadeOut();
+                    $(this).children('p').fadeIn();
                 }
-                else if(pageCurrent < i) {//dodajemy
-                    $('.page').each(function (i, obj) {
-                        pagePosition[i] -= 200;
-                    });
-                    updatePages();
-                    pageCurrent++;
+
+                while(pageCurrent !== i) {
+                    if(pageCurrent > i) {//odejmujemy
+                        $('.page').each(function (i, obj) {
+                            pagePosition[i] += 200;
+                        });
+                        updatePages();
+                        pageCurrent--;
+                    }
+                    else if(pageCurrent < i) {//dodajemy
+                        $('.page').each(function (i, obj) {
+                            pagePosition[i] -= 200;
+                        });
+                        updatePages();
+                        pageCurrent++;
+                    }
                 }
-            }
 
 
+            });
         });
-    });
 };
 
 const countdownInit = function () {
