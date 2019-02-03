@@ -7,9 +7,9 @@
 
         <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Orbitron" rel="stylesheet">
 
+        <link rel="shortcut icon" type="image/png" href="./assets/img/favicon.png"/>
         <link rel="stylesheet" href="./assets/css/bootstrap.min.css" type="text/css" />
         <link rel="stylesheet" href="./assets/css/main_backup.css" type="text/css" />
-        <link rel="stylesheet" href="./assets/css/javascript.css" type="text/css" />
 
         <script src="./assets/js/jquery-1.12.4.min.js"></script>
         <script src="./assets/js/bootstrap.min.js"></script>
@@ -36,10 +36,10 @@
         <header>
 
             <nav class="navbar navbar-expand-lg navbar-dark row">
-                <div class="col-4 float-left logo-main anim-post-load-logo-main">
+                <div class="col-3 col-sm-4 float-left logo-main anim-post-load-logo-main">
                     BZIP<span class="color-yellow">2</span>
                 </div>
-                <div class="col-6 col-lg-4 float-left logo-sub anim-post-load-logo-sub">
+                <div class="col-7 col-sm-6 col-lg-4 float-left logo-sub anim-post-load-logo-sub">
                     <div>Lossless Data Compression Algorithm</div>
                     <div class="d-none d-md-block">made with javascript</div>
                     <hr class="d-none d-md-block logo-hr anim-post-load-logo-hr">
@@ -65,9 +65,9 @@
 
                 <div>
                     <ul class="navbar-nav">
-                        <li class="nav-item"><span class="numeric">00.</span> Home <p class="hr"></p></li>
-                        <li class="nav-item"><span class="numeric">01.</span> Description <p class="hr"></p></li>
-                        <li class="nav-item"><span class="numeric">10.</span> GitHub <p class="hr"></p></li>
+                        <li class="nav-item"><span class="numeric">00.</span> Home </li>
+                        <li class="nav-item"><span class="numeric">01.</span> Description </li>
+                        <li class="nav-item"><span class="numeric">10.</span> GitHub </li>
                     </ul>
                 </div>
             </nav>
@@ -83,20 +83,12 @@
                         <div class="half">
                             <div class="minipage">
 
-                                <div class="minipaneltext">
-                                    <div>
-                                        <textarea id="inputarea"></textarea>
-                                    </div>
+                                <div>
+                                    <textarea id="inputarea">Here you can input a string...</textarea>
+                                </div>
 
-                                    <div>
-                                        <div id="compress" class="submit_button">
-                                            COMPRESS
-                                        </div>
-                                        /
-                                        <div id="decompress" class="submit_button">
-                                            deCOMPRESS
-                                        </div>
-                                    </div>
+                                <div id="bzip2" class="button">
+                                    COMPRESS
                                 </div>
 
                             </div>
@@ -105,14 +97,12 @@
                         <div class="half">
                             <div class="minipage">
 
-                                <div class="minipaneltext">
-                                    <div>
-                                        <textarea id="outputarea"></textarea>
-                                    </div>
+                                <div>
+                                    <textarea id="outputarea">Here you will see compressed result :)</textarea>
+                                </div>
 
-                                    <div>
-                                        Result
-                                    </div>
+                                <div class="button">
+                                    Result
                                 </div>
 
                             </div>
@@ -145,8 +135,10 @@
                             <a href="https://github.com/maciej-wrzesinski/" target="_blank">
                                 <img src="assets/img/GitHub-Mark-Light-120px-plus.png" />
                                 <br />
-                                <span class="smalltext">github.com/maciej-wrzesinski/</span>
+                                <span class="smalltext underline">github.com/maciej-wrzesinski/</span>
+
                             </a>
+                            <br />
                             <br />
                             I do mostly web related things
 

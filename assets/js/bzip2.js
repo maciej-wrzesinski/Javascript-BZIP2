@@ -36,68 +36,11 @@ function BZIP2() {
     };
 
     this.decompress = function(dataString) {
-        return undoBurrowsWheelerTransform(undoMoveToFront(undoHuffmans(undoShortenAndBase64(dataString))));
-    };
-
-    /* private methods that private methods below use */
-
-    let countNumberOfBits = function (dataString) {
-        let finalString = [];
-        for (let i = 0; i < dataString.length; i++) {
-            finalString[i] = dataString[i].charCodeAt(0).toString(2);
+        try {
+            return undoBurrowsWheelerTransform(undoMoveToFront(undoHuffmans(undoShortenAndBase64(dataString))));
         }
-
-        return finalString.join(' ');
-    };
-
-    let sortWithIndeces = function (originalArray) {
-        let size = originalArray.length;
-        let toSort = new Array(size);
-
-        //add indeces and arrange it this way so .sort() can work with this properly
-        for (let i = 0; i < originalArray.length; i++) {
-            toSort[i] = [originalArray.slice().splice(i, originalArray.length).join('') + originalArray.join(''), i];
-        }
-
-        //sort them out
-        toSort.sort(function(left, right) {
-            return left[0] < right[0] ? -1 : 1;
-        });
-
-        toSort.sortIndices = [];
-        for (let j = 0; j < toSort.length; j++) {
-            toSort.sortIndices.push(toSort[j][1]);
-            toSort[j] = toSort[j][0];
-        }
-
-        return toSort;
-    };
-
-    let sortAlphabetically2DArray = function (array, size, sortedArrayNumber) {
-        let i = 0;
-        while (i !== size) {
-            if (array[sortedArrayNumber][i] > array[sortedArrayNumber][i + 1]) {
-                for (let j = 0; j <= sortedArrayNumber; j++) {
-                    if (array[j][i]) {
-                        //swap elements in array
-                        array[j][i] = array[j].splice(i + 1, 1, array[j][i])[0];
-                    }
-                }
-                --i;
-            }
-            else
-                ++i;
-        }
-        return array;
-    };
-
-    let treeTraversal = function (tree, binaryCode, huffmanArray) {
-        if(Array.isArray(tree) && tree.length === 3) { //if this is a sub-root
-            treeTraversal(tree[1], binaryCode + "0", huffmanArray); //left traversal
-            treeTraversal(tree[2], binaryCode + "1", huffmanArray); //right traversal
-        }
-        else if(Array.isArray(tree) && tree.length === 2) { //if this is a leaf
-            huffmanArray.push([binaryCode, tree[1]]); // create char to binary table
+        catch (e) {
+            return 'Error! You probably wanted to decompress an invalid base64 string!';
         }
     };
 
@@ -666,5 +609,67 @@ function BZIP2() {
         }
 
         return dataString;
+    };
+
+    /* private methods that other private methods use */
+
+    let countNumberOfBits = function (dataString) {
+        let finalString = [];
+        for (let i = 0; i < dataString.length; i++) {
+            finalString[i] = dataString[i].charCodeAt(0).toString(2);
+        }
+
+        return finalString.join(' ');
+    };
+
+    let sortWithIndeces = function (originalArray) {
+        let size = originalArray.length;
+        let toSort = new Array(size);
+
+        //add indeces and arrange it this way so .sort() can work with this properly
+        for (let i = 0; i < originalArray.length; i++) {
+            toSort[i] = [originalArray.slice().splice(i, originalArray.length).join('') + originalArray.join(''), i];
+        }
+
+        //sort them out
+        toSort.sort(function(left, right) {
+            return left[0] < right[0] ? -1 : 1;
+        });
+
+        toSort.sortIndices = [];
+        for (let j = 0; j < toSort.length; j++) {
+            toSort.sortIndices.push(toSort[j][1]);
+            toSort[j] = toSort[j][0];
+        }
+
+        return toSort;
+    };
+
+    let sortAlphabetically2DArray = function (array, size, sortedArrayNumber) {
+        let i = 0;
+        while (i !== size) {
+            if (array[sortedArrayNumber][i] > array[sortedArrayNumber][i + 1]) {
+                for (let j = 0; j <= sortedArrayNumber; j++) {
+                    if (array[j][i]) {
+                        //swap elements in array
+                        array[j][i] = array[j].splice(i + 1, 1, array[j][i])[0];
+                    }
+                }
+                --i;
+            }
+            else
+                ++i;
+        }
+        return array;
+    };
+
+    let treeTraversal = function (tree, binaryCode, huffmanArray) {
+        if(Array.isArray(tree) && tree.length === 3) { //if this is a sub-root
+            treeTraversal(tree[1], binaryCode + "0", huffmanArray); //left traversal
+            treeTraversal(tree[2], binaryCode + "1", huffmanArray); //right traversal
+        }
+        else if(Array.isArray(tree) && tree.length === 2) { //if this is a leaf
+            huffmanArray.push([binaryCode, tree[1]]); // create char to binary table
+        }
     };
 }

@@ -65,7 +65,9 @@ const setMobile = function () {
     }
 
     //set the mobile page height to just right
-    $('.page').css('height', $(window).height()-$('footer').height()-$('nav').height());
+    let height = $(window).height()-$('footer').height()-$('nav').height();
+    height = height < 500 ? 500 : height;
+    $('.page').css('height', height);
 }
 
 const triggerPageRotation = function () {
@@ -261,21 +263,51 @@ const countdownWork = function (cssClass) {
 
 const triggerCompression = function (bzip2) {
 
-    $('#compress').on('click', function(){
-        var text = $.trim($('#inputarea').val());
-        if (text !== '') {
+    $('#bzip2')
+        .on('click', function(){
+            var text = $.trim($('#inputarea').val());
+            if (text !== '') {
+                if (isStringBase64(text))
+                    $('#outputarea').val(bzip2.decompress(text));
+                else
+                    try {
+                        $('#outputarea').val(bzip2.compress(text));
+                    }
+                    catch (e) {
+                        $('#outputarea').val('Something went wrong! You probably tried to decompress an invalid base64 string');
+                    }
+            }
+        });
+    $('#inputarea')
+        .focus(function() {
+            if (this.value === this.defaultValue) {
+                this.value = '';
+            }
+        })
+        .blur(function() {
+            if (this.value === '') {
+                this.value = this.defaultValue;
+            }
+        })
+        .bind('input propertychange', function() {
+            if (this.value !== '')
+                $('#bzip2').addClass('underline');
+            else
+                $('#bzip2').removeClass('underline');
+            if (isStringBase64(this.value) && this.value !== '')
+                $('#bzip2').text('decompress');
+            else
+                $('#bzip2').text('compress');
+        });
 
-            $('#outputarea').val(bzip2.compress(text));
+};
 
-        }
-    });
 
-    $('#decompress').on('click', function(){
-        var text = $.trim($('#inputarea').val());
-        if (text !== '') {
-
-            $('#outputarea').val(bzip2.decompress(text));
-
-        }
-    });
+const isStringBase64 = function (string) {
+    try {
+        return Base64.encode(Base64.decode(string)) === string;
+    }
+    catch (e) {
+        return false;
+    }
 };

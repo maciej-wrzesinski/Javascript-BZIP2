@@ -52,7 +52,6 @@ a
 {
     color: #FEFCFF;
     text-decoration: none;
-    display: block;
 }
 
 a:hover {
@@ -73,6 +72,7 @@ ul
 ul > li
 {
     cursor: pointer;
+    margin: auto;
 }
 
 #burger {
@@ -131,26 +131,19 @@ textarea {
     border: 1px #353535 solid;
     resize: none;
     font-family: 'Roboto', sans-serif;
-    width: 240px;
+    width: 50%;
     height: 320px;
 }
 
-.submit_button {
+.button {
     text-transform: uppercase;
     font-size: 23px;
     cursor: pointer;
     color: white;
-    background-color: unset;
-    border: none;
-    padding: 0;
-    margin: 20px;
-    border-bottom: 1px solid #5600FF;
+    margin: 20px !important;
     display: inline-block;
 }
 
-button:focus{
-    outline: none;
-}
 /*
 nav
  */
@@ -161,7 +154,6 @@ nav
 }
 
 .underline {
-    width: 100%;
     border-bottom: 1px solid #5600FF;
     margin: auto;
 }
@@ -372,3 +364,13 @@ Pre-loader Post-loader stuff
         transform: translateY(0);
     }
 }
+
+/*
+JS classes in case we want to change something (or just to remember them)
+ */
+
+#js-joke { opacity: 0; }
+
+.js-http {  }
+
+#js-loader {  }
