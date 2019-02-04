@@ -46,18 +46,30 @@ $().ready(function() {
 
 
     $('#burger').on('click', function () {
-        $('#mobile-menu').toggleClass('visable');
-        $('.mobile-overlay').fadeToggle();
+        $('.mobile-overlay').css('display', 'block').animate({opacity:1}, 100);
+        $('#mobile-menu').animate({'left':'0px'}, 100);
     });
     $('.mobile-overlay').on('click', function () {
-        $('#mobile-menu').toggleClass('visable');
-        $('.mobile-overlay').fadeToggle();
+        $(this).animate({opacity:0}, 100, function () { $(this).css('display', ''); });
+        $('#mobile-menu').animate({'left':'-250px'}, 100);
+    });
+    $('#mobile-menu').on('click', function () {
+        $('.mobile-overlay').animate({opacity:0}, 100, function () { $('.mobile-overlay').css('display', ''); });
+        $(this).animate({'left':'-250px'}, 100);
+    });
+    $('#mobile-menu').on('click', function () {
+        $('.mobile-overlay').animate({opacity:0}, 100, function () { $('.mobile-overlay').css('display', ''); });
+        $(this).animate({'left':'-250px'}, 100);
+    });
+    $('.js-mobile-href').on('click', function () {
+        var id = $(this).data("go");
+        $("html, body").animate({ scrollTop: $("#" + id).offset().top }, 500);
     });
 
 });
 
 const setMobile = function () {
-    if ($(window).width() <= 991) {
+    if ($(window).width() <= 991 || $(window).height() <= 630) {
         isMobile = 1;
     }
     else {
@@ -67,7 +79,7 @@ const setMobile = function () {
     //set the mobile page height to just right
     let height = $(window).height()-$('footer').height()-$('nav').height();
     height = height < 500 ? 500 : height;
-    $('.page').css('height', height);
+    $('.page-wrapper').css('height', height);
 }
 
 const triggerPageRotation = function () {
@@ -145,7 +157,7 @@ const forceScroll = function (upordown) {
 };
 
 const updatePages = function () {
-    $('.page').each(function(i) {
+    $('.page-wrapper').each(function(i) {
         if (isMobile === 0)
             $(pageArray[i]).css('transform', 'translateX(' + pagePosition[i] + '%)');
         else
@@ -157,16 +169,16 @@ const buttonsInit = function () {
     //reset the scroll so the pagination works always when resized
     pageCurrent = 0;
 
-    $('.page')
+    $('.page-wrapper')
     //count pages
         .each(function(i) {
 
             if (isMobile === 0) {
-                $('#pages-wrapper').css('width', 100 * (i + 1) + '%');
+                $('#js-pages-wrapper').css('width', 100 * (i + 1) + '%');
                 pageWidth = 100 / (i + 1);
             }
             else {
-                $('#pages-wrapper').css('width', '');
+                $('#js-pages-wrapper').css('width', '');
             }
         })
     //and transform them
@@ -211,14 +223,14 @@ const buttonsInit = function () {
 
                 while(pageCurrent !== i) {
                     if(pageCurrent > i) {//odejmujemy
-                        $('.page').each(function (i, obj) {
+                        $('.page-wrapper').each(function (i, obj) {
                             pagePosition[i] += 200;
                         });
                         updatePages();
                         pageCurrent--;
                     }
                     else if(pageCurrent < i) {//dodajemy
-                        $('.page').each(function (i, obj) {
+                        $('.page-wrapper').each(function (i, obj) {
                             pagePosition[i] -= 200;
                         });
                         updatePages();
@@ -301,7 +313,6 @@ const triggerCompression = function (bzip2) {
         });
 
 };
-
 
 const isStringBase64 = function (string) {
     try {

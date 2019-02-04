@@ -51,9 +51,9 @@
 
                 <div id="menu" class="col-lg-4 collapse navbar-collapse anim-post-load-nav">
                     <ul class="navbar-nav">
-                        <li class="nav-item js-href"><span class="numeric">00.</span> Home <p class="hr"></p></li>
-                        <li class="nav-item js-href"><span class="numeric">01.</span> Description <p class="hr"></p></li>
-                        <li class="nav-item js-href"><span class="numeric">10.</span> GitHub <p class="hr"></p></li>
+                        <li class="nav-item js-href clickable"><span class="numeric color-yellow">00.</span> Home <p class="hr"></p></li>
+                        <li class="nav-item js-href clickable"><span class="numeric color-yellow">01.</span> Description <p class="hr"></p></li>
+                        <li class="nav-item js-href clickable"><span class="numeric color-yellow">10.</span> GitHub <p class="hr"></p></li>
                     </ul>
                 </div>
             </nav>
@@ -65,9 +65,9 @@
 
                 <div>
                     <ul class="navbar-nav">
-                        <li class="nav-item"><span class="numeric">00.</span> Home </li>
-                        <li class="nav-item"><span class="numeric">01.</span> Description </li>
-                        <li class="nav-item"><span class="numeric">10.</span> GitHub </li>
+                        <li class="nav-item js-mobile-href clickable" data-go="page0"><span class="numeric color-yellow">00.</span> Home </li>
+                        <li class="nav-item js-mobile-href clickable" data-go="page1"><span class="numeric color-yellow">01.</span> Description </li>
+                        <li class="nav-item js-mobile-href clickable" data-go="page2"><span class="numeric color-yellow">10.</span> GitHub </li>
                     </ul>
                 </div>
             </nav>
@@ -75,59 +75,51 @@
         </header>
 
         <main>
-            <div id="pages-wrapper">
-                <div id="page0" class="page anim-post-load-page">
+            <div id="js-pages-wrapper">
+                <section id="page0" class="page-wrapper anim-post-load-page">
 
-                    <div class="page_container">
+                    <div class="page-container row">
 
-                        <div class="half">
-                            <div class="minipage">
+                        <div class="col">
 
-                                <div>
-                                    <textarea id="inputarea">Here you can input a string...</textarea>
-                                </div>
+                            <textarea title="inputarea" id="inputarea">Here you can input a string...</textarea>
 
-                                <div id="bzip2" class="button">
-                                    COMPRESS
-                                </div>
+                            <br />
 
-                            </div>
+                            <span id="bzip2" class="button clickable">COMPRESS</span>
+
                         </div>
 
-                        <div class="half">
-                            <div class="minipage">
+                        <div class="col">
 
-                                <div>
-                                    <textarea id="outputarea">Here you will see compressed result :)</textarea>
-                                </div>
+                            <textarea title="outputarea" id="outputarea">Here you will see compressed result :)</textarea>
 
-                                <div class="button">
-                                    Result
-                                </div>
+                            <br />
 
-                            </div>
+                            <span class="button">Result</span>
+
                         </div>
 
                     </div>
 
-                </div>
+                </section>
 
-                <div id="page1" class="page anim-post-load-page">
+                <section id="page1" class="page-wrapper anim-post-load-page">
 
-                    <div class="page_container minipage bigcenteredtext">
+                    <div class="page-container bigcenteredtext page-container-bigtext-justify">
 
-                            BZIP2 is a lossless data compression algorithm, it is available on a BSD based license.<br />
-                            It uses Burrows-Wheelers transform into Move To Front ending with Huffmans algorithm.<br />
-                            Similar to GZIP but slower. Has bigger compression rate in most cases.<br />
-                            Original BZIP2 was developed by Julian Seward and this implementation is not the original
+                            BZIP2 is a lossless data compression algorithm, it is available on a BSD based license.
+                            It uses Burrows-Wheelers transform into Move To Front ending with Huffmans algorithm.
+                            Similar to GZIP but slower. Has bigger compression rate in most cases.
+                            Original BZIP2 was developed by Julian Seward and this implementation is not the original.
 
                     </div>
 
-                </div>
+                </section>
 
-                <div id="page2" class="page anim-post-load-page">
+                <section id="page2" class="page-wrapper anim-post-load-page">
 
-                    <div class="page_container minipage bigcenteredtext">
+                    <div class="page-container bigcenteredtext page-container-bigtext-centered">
 
                             You can look at more of my code at
                             <br />
@@ -144,7 +136,7 @@
 
                     </div>
 
-                </div>
+                </section>
 
             </div>
 
